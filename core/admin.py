@@ -1,10 +1,10 @@
 from django.contrib import admin
-from .models import UserBlog
+from .models import UserProfile
 from .models import Post
 from .models import Tag
 
 
-@admin.register(UserBlog)
+@admin.register(UserProfile)
 class UserProfile(admin.ModelAdmin):
     list_display = ('nickname',)
 
