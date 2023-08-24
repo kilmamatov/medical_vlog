@@ -14,6 +14,6 @@ class UserProfile(django_filters.FilterSet):
     nickname = django_filters.CharFilter(field_name='nickname', lookup_expr='icontains')
 
     class Meta:
-        model = models.Tag
+        model = models.UserProfile
         exclude = ('id', 'user', 'photo', 'description')
 

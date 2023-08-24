@@ -34,7 +34,7 @@ class Post(models.Model):
     title = models.CharField('Тема', max_length=255)
     text = models.TextField(verbose_name='Описание')
     photo = models.ImageField(verbose_name='Фото', blank=True, null=True)
-    tags = models.ManyToManyField(Tag, related_name='posts')
+    tags = models.ManyToManyField(Tag, related_name='posts', blank=True, null=True)
 
     class Meta:
         verbose_name = 'Пост'
