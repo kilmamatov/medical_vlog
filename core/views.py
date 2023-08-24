@@ -1,12 +1,15 @@
 from django.shortcuts import render
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.viewsets import ModelViewSet
-from . import models
+from . import models, filters
 from . import serializers
 
 
 class TagViewSet(ModelViewSet):
     queryset = models.Tag.objects.all()
     serializer_class = serializers.Tag
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = filters.Tag
 
 
 class UserProfileViewSet(ModelViewSet):
@@ -15,6 +18,8 @@ class UserProfileViewSet(ModelViewSet):
     """
     queryset = models.UserProfile.objects.all()
     serializer_class = serializers.UserProfile
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = filters.UserProfile
 
     def perform_create(self, serializer):
         serializer.validated_data['user'] = self.request.user
