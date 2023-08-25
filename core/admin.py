@@ -1,12 +1,12 @@
 from django.contrib import admin
-from .models import UserProfile
-from .models import Post
-from .models import Tag
+
+from core.models import Post, Tag
+from user_auth.models import UserModel
 
 
-@admin.register(UserProfile)
-class UserProfile(admin.ModelAdmin):
-    list_display = ('nickname',)
+@admin.register(UserModel)
+class UserModel(admin.ModelAdmin):
+    list_display = ('username',)
 
 
 @admin.register(Post)
@@ -17,4 +17,3 @@ class Post(admin.ModelAdmin):
 @admin.register(Tag)
 class Tags(admin.ModelAdmin):
     list_display = ('name',)
-

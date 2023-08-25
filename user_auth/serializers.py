@@ -1,6 +1,22 @@
 from django.contrib.auth import authenticate
+from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
-from . import models
+
+from core.models import Post
+from .models import UserModel
+
+
+class UserSerializer(serializers.ModelSerializer):
+    post = Post
+
+    class Meta:
+        model = UserModel
+        fields = ['nickname', 'photo', 'description', 'password']
+
+    def create(self, validated_data):
+        validated_data['password'] = make_password(validated_data.get('password'))
+        user = UserModel.objects.create(**validated_data)
+        return user
 
 
 class RegisterUser(serializers.Serializer):
@@ -9,7 +25,7 @@ class RegisterUser(serializers.Serializer):
     password_again = serializers.CharField(min_length=8)
 
     def validate_username(self, value):
-        if models.User.objects.filter(username=value).exists():
+        if UserModel.objects.filter(username=value).exists():
             raise serializers.ValidationError('Пользователь с таким именем уже есть')
         return value
 
@@ -35,14 +51,3 @@ class LoginUser(serializers.Serializer):
 
         attrs['user'] = user
         return attrs
-
-    # def validate_username(self, value):
-    #     if not models.User.objects.filter(username=value).exists():
-    #         raise serializers.ValidationError('Пользователь с таким именем не найден')
-    #     return value
-    #
-    # def validate(self, attrs):
-    #     user = models.User.objects.get(username=attrs['username'])
-    #     if not user.check_password(attrs['password']):
-    #         raise serializers.ValidationError({'password': 'Пароль не верный'})
-    #     return attrs

@@ -8,5 +8,6 @@ urlpatterns = [
 
 router = DefaultRouter()
 router.register('tags', views.TagViewSet, basename='tags')
+router.register('post', views.PostViewSet, basename='post')
 router.register('user_profiles', views.UserProfileViewSet, basename='user_profiles')
 urlpatterns += router.urls
