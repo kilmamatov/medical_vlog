@@ -46,13 +46,18 @@ class Migration(migrations.Migration):
                 (
                     "photo",
                     models.ImageField(
-                        blank=True, null=True, upload_to="", verbose_name="Фото"
+                        blank=True,
+                        null=True,
+                        upload_to="",
+                        verbose_name="Фото",
                     ),
                 ),
                 (
                     "tags",
                     models.ManyToManyField(
-                        blank=True, related_name="posts", to="core.tagmodel"
+                        blank=True,
+                        related_name="posts",
+                        to="core.tagmodel",
                     ),
                 ),
             ],

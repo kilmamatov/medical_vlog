@@ -1,6 +1,6 @@
 from rest_framework.routers import DefaultRouter
 
-from core.views import TagViewSet, UserProfileViewSet, PostViewSet
+from core.views import PostViewSet, TagViewSet, UserProfileViewSet
 
 urlpatterns = []
 

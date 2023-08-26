@@ -16,7 +16,8 @@ class PostFilters(django_filters.FilterSet):
     title = django_filters.CharFilter(field_name="title", lookup_expr="icontains")
     text = django_filters.CharFilter(field_name="text", lookup_expr="icontains")
     TagModels = django_filters.CharFilter(
-        field_name="TagModels", lookup_expr="icontains"
+        field_name="TagModels",
+        lookup_expr="icontains",
     )
 
     class Meta:

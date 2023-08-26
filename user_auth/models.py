@@ -30,7 +30,9 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
     created = models.DateTimeField(auto_now_add=True)
     username = models.CharField(
-        verbose_name="Имя пользователя", max_length=20, unique=True
+        verbose_name="Имя пользователя",
+        max_length=20,
+        unique=True,
     )
     photo = models.ImageField(verbose_name="Фотография", blank=True, null=True)
     description = models.TextField(verbose_name="Описание", blank=True)

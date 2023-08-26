@@ -4,9 +4,9 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from core.filters import TagFilters
+from core.models import PostModel, TagModel
+from core.serializers import PostSerializer, TagSerializer, UserProfile
 from user_auth.filters import UserFilter
-from core.models import TagModel, PostModel
-from core.serializers import TagSerializer, UserProfile, PostSerializer
 from user_auth.models import UserModel
 
 

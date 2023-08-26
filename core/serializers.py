@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
+from core.models import PostModel, TagModel
 from user_auth.models import UserModel
-from core.models import TagModel, PostModel
 
 
 class TagSerializer(serializers.ModelSerializer):

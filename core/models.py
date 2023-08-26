@@ -17,7 +17,9 @@ class TagModel(models.Model):
 
 class PostModel(models.Model):
     user = models.ForeignKey(
-        UserModel, verbose_name="Пользователь", on_delete=models.CASCADE
+        UserModel,
+        verbose_name="Пользователь",
+        on_delete=models.CASCADE,
     )
     title = models.CharField("Тема", max_length=255)
     text = models.TextField(verbose_name="Описание")

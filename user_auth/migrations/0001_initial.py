@@ -27,20 +27,27 @@ class Migration(migrations.Migration):
                 (
                     "last_login",
                     models.DateTimeField(
-                        blank=True, null=True, verbose_name="last login"
+                        blank=True,
+                        null=True,
+                        verbose_name="last login",
                     ),
                 ),
                 ("created", models.DateTimeField(auto_now_add=True)),
                 (
                     "username",
                     models.CharField(
-                        max_length=20, unique=True, verbose_name="Имя пользователя"
+                        max_length=20,
+                        unique=True,
+                        verbose_name="Имя пользователя",
                     ),
                 ),
                 (
                     "photo",
                     models.ImageField(
-                        blank=True, null=True, upload_to="", verbose_name="Фотография"
+                        blank=True,
+                        null=True,
+                        upload_to="",
+                        verbose_name="Фотография",
                     ),
                 ),
                 ("description", models.TextField(blank=True, verbose_name="Описание")),
