@@ -1,20 +1,19 @@
 from django.contrib import admin
-from .models import UserProfile
-from .models import Post
-from .models import Tag
+
+from core.models import PostModel, TagModel
+from user_auth.models import UserModel
 
 
-@admin.register(UserProfile)
-class UserProfile(admin.ModelAdmin):
-    list_display = ('nickname',)
+@admin.register(UserModel)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ("username",)
 
 
-@admin.register(Post)
-class Post(admin.ModelAdmin):
-    list_display = ('title',)
+@admin.register(PostModel)
+class PostAdmin(admin.ModelAdmin):
+    list_display = ("title",)
 
 
-@admin.register(Tag)
-class Tags(admin.ModelAdmin):
-    list_display = ('name',)
-
+@admin.register(TagModel)
+class TagsAdmin(admin.ModelAdmin):
+    list_display = ("name",)

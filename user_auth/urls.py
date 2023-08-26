@@ -1,12 +1,11 @@
 from django.urls import path, include
-from . import views
 
+from user_auth.views import RegisterUserView
 
 auth = [
-    path('create_user/', views.RegisterUser.as_view()),
-    path('login_user/', views.LoginUser.as_view()),
+    path("create_user/", RegisterUserView.as_view()),
 ]
 
 urlpatterns = [
-    path('registration/', include(auth)),
+    path("registration/", include(auth)),
 ]

@@ -1,31 +1,32 @@
 from rest_framework import serializers
-from . import models
+
+from user_auth.models import UserModel
+from core.models import TagModel, PostModel
 
 
-class Tag(serializers.ModelSerializer):
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TagModel
+        fields = "__all__"
+
+
+class PostSerializer(serializers.ModelSerializer):
+    tags = TagSerializer(many=True, required=False)
 
     class Meta:
-        model = models.Tag
-        fields = '__all__'
-
-
-class Post(serializers.ModelSerializer):
-    tags = Tag(many=True, required=False)
-
-    class Meta:
-        model = models.Post
-        exclude = ('user',)
+        model = PostModel
+        exclude = ("user",)
 
     def create(self, validated_data):
-        user = self.context['request'].user
-        user_profile = models.UserProfile.objects.filter(user=user).first()
-        validated_data['user'] = user_profile
+        user = self.context["request"].user
+        user_profile = UserModel.objects.filter(user=user).first()
+        validated_data["user"] = user_profile
         return super().create(validated_data)
 
 
 class UserProfile(serializers.ModelSerializer):
-    post = Post
+    post = PostSerializer
 
     class Meta:
-        model = models.UserProfile
-        exclude = ('user',)
+        model = UserModel
+        fields = ("username",)

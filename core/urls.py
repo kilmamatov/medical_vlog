@@ -1,13 +1,11 @@
-from django.urls import path
 from rest_framework.routers import DefaultRouter
-from . import views
 
-urlpatterns = [
+from core.views import TagViewSet, UserProfileViewSet, PostViewSet
 
-]
+urlpatterns = []
 
 router = DefaultRouter()
-router.register('tags', views.TagViewSet, basename='tags')
-router.register('user_profiles', views.UserProfileViewSet, basename='user_profiles')
-router.register('posts', views.PostViewSet, basename='posts')
+router.register("tags", TagViewSet, basename="tags")
+router.register("user_profiles", UserProfileViewSet, basename="user_profiles")
+router.register("posts", PostViewSet, basename="posts")
 urlpatterns += router.urls
