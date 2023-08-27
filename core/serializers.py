@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from core.models import PostModel, TagModel
-from user_auth.models import UserModel
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -15,10 +14,10 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PostModel
-        fields = ['tags', 'title', 'text', 'photo']
+        fields = ["tags", "title", "text", "photo"]
 
     def create(self, validated_data):
-        tags_data = validated_data.pop('tags', [])
+        tags_data = validated_data.pop("tags", [])
         post = PostModel.objects.create(**validated_data)
 
         for tag_data in tags_data:
