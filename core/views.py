@@ -17,15 +17,15 @@ class TagViewSet(ModelViewSet):
     filterset_class = TagFilters
 
 
-class UserProfileViewSet(ModelViewSet):
-    queryset = UserModel.objects.all()
-    serializer_class = UserProfile
-    filter_backends = [DjangoFilterBackend]
-    filterset_class = UserFilter
-
-    def perform_create(self, serializer):
-        serializer.validated_data["user"] = self.request.user
-        serializer.save()
+# class UserProfileViewSet(ModelViewSet):
+#     queryset = UserModel.objects.all()
+#     serializer_class = UserProfile
+#     filter_backends = [DjangoFilterBackend]
+#     filterset_class = UserFilter
+#
+#     def perform_create(self, serializer):
+#         serializer.validated_data["user"] = self.request.user
+#         serializer.save()
 
 
 class PostViewSet(ModelViewSet):
