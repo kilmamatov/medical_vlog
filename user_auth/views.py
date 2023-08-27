@@ -1,9 +1,9 @@
+from django.contrib.auth import login, authenticate
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from django.contrib.auth import login, authenticate
 from rest_framework.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,
@@ -11,7 +11,6 @@ from rest_framework.status import (
     HTTP_404_NOT_FOUND,
 )
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.views import TokenObtainPairView
 
 from user_auth.models import UserModel
 from user_auth.serializers import (
@@ -45,7 +44,6 @@ class UserProfileView(GenericAPIView):
     serializer_class = UserProfileSerializer
     authentication_classes = (SessionAuthentication,)
     permission_classes = [IsAuthenticated]
-
 
     def post(self, request):
         try:
