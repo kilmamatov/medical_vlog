@@ -15,18 +15,22 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PostModel
-        exclude = ("user",)
+        fields = ['tags', 'title', 'text', 'photo']
 
     def create(self, validated_data):
-        user = self.context["request"].user
-        user_profile = UserModel.objects.filter(user=user).first()
-        validated_data["user"] = user_profile
-        return super().create(validated_data)
+        tags_data = validated_data.pop('tags', [])
+        post = PostModel.objects.create(**validated_data)
+
+        for tag_data in tags_data:
+            tag, created = TagModel.objects.get_or_create(**tag_data)
+            post.tags.add(tag)
+
+        return post
 
 
-class UserProfile(serializers.ModelSerializer):
-    post = PostSerializer
-
-    class Meta:
-        model = UserModel
-        fields = ("username",)
+# class UserProfile(serializers.ModelSerializer):
+#     post = PostSerializer
+#
+#     class Meta:
+#         model = UserModel
+#         fields = ("username",)

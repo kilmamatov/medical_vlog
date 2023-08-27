@@ -1,4 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -42,8 +43,9 @@ class RegisterUserView(GenericAPIView):
 class UserProfileView(GenericAPIView):
     queryset = UserModel
     serializer_class = UserProfileSerializer
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = [IsAuthenticated]
 
-    # permission_classes = [IsAuthenticated]
 
     def post(self, request):
         try:
