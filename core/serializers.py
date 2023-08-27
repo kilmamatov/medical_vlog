@@ -17,16 +17,10 @@ class PostSerializer(serializers.ModelSerializer):
         model = PostModel
         exclude = ("user",)
 
-    def create(self, validated_data):
-        user = self.context["request"].user
-        user_profile = UserModel.objects.filter(user=user).first()
-        validated_data["user"] = user_profile
-        return super().create(validated_data)
 
-
-class UserProfile(serializers.ModelSerializer):
-    post = PostSerializer
-
-    class Meta:
-        model = UserModel
-        fields = ("username",)
+# class UserProfile(serializers.ModelSerializer):
+#     post = PostSerializer
+#
+#     class Meta:
+#         model = UserModel
+#         fields = ("username",)

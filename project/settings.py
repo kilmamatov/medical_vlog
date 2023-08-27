@@ -28,10 +28,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "drf_yasg",
     "django_filters",
     "rest_framework",
     "rest_framework.authtoken",
-    "rest_framework_swagger",
     "user_auth",
     "core",
     "rest_framework_simplejwt.token_blacklist",
@@ -171,3 +171,5 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "user_auth.UserModel"
+
+LOGIN_URL = '/admin/login/'
