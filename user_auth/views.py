@@ -39,13 +39,16 @@ class RegisterUserView(GenericAPIView):
         )
 
 
-class UserProfileView(GenericAPIView):
+class UserModelView(GenericAPIView):
     queryset = UserModel
     serializer_class = UserProfileSerializer
     authentication_classes = (SessionAuthentication,)
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        pass
+
+    def patch(self, request):
         try:
             user = UserModel.objects.get(username=self.request.user.username)
         except ObjectDoesNotExist:
@@ -53,18 +56,11 @@ class UserProfileView(GenericAPIView):
                 {"message": "User does not exist, try again"},
                 status=HTTP_404_NOT_FOUND,
             )
-        try:
-            user.username = self.request.data["username"]
-            user.photo = self.request.FILES["photo"]
-            user.description = self.request.data["description"]
-            serializer = self.serializer_class(user)
-            serializer.is_valid(raise_exception=True)
-            user.save()
-        except ValueError:
-            return Response(
-                {"message": "The entered data is incorrect"},
-                status=HTTP_400_BAD_REQUEST,
-            )
+        for key, value in self.request.data.items():
+            setattr(user, key, value)
+        serializer = self.serializer_class(data=request.data, instance=user)
+        serializer.is_valid(raise_exception=True)
+        user.save()
         return Response(serializer.data, status=HTTP_200_OK)
 
 
