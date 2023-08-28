@@ -42,7 +42,6 @@ class RegisterUserView(GenericAPIView):
 class UserModelView(GenericAPIView):
     queryset = UserModel
     serializer_class = UserProfileSerializer
-
     # authentication_classes = (SessionAuthentication,)
     # permission_classes = [IsAuthenticated]
 
