@@ -1,15 +1,15 @@
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework.authentication import SessionAuthentication
 from rest_framework.generics import GenericAPIView
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,
     HTTP_400_BAD_REQUEST,
     HTTP_404_NOT_FOUND,
+    HTTP_205_RESET_CONTENT,
 )
+from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from user_auth.models import UserModel
@@ -42,15 +42,13 @@ class RegisterUserView(GenericAPIView):
 class UserModelView(GenericAPIView):
     queryset = UserModel
     serializer_class = UserProfileSerializer
-    authentication_classes = (SessionAuthentication,)
-    permission_classes = [IsAuthenticated]
 
-    def post(self, request):
-        pass
+    # authentication_classes = (SessionAuthentication,)
+    # permission_classes = [IsAuthenticated]
 
-    def patch(self, request):
+    def patch(self, request, pk):
         try:
-            user = UserModel.objects.get(username=self.request.user.username)
+            user = UserModel.objects.get(pk=pk)
         except ObjectDoesNotExist:
             return Response(
                 {"message": "User does not exist, try again"},
@@ -62,6 +60,20 @@ class UserModelView(GenericAPIView):
         serializer.is_valid(raise_exception=True)
         user.save()
         return Response(serializer.data, status=HTTP_200_OK)
+
+    def delete(self, request, pk):
+        try:
+            user = UserModel.objects.get(pk=pk)
+            user.delete()
+            return Response(
+                {"message": "User successfully deleted"},
+                status=HTTP_200_OK,
+            )
+        except ObjectDoesNotExist:
+            return Response(
+                {"message": "User does not exist, try again"},
+                status=HTTP_404_NOT_FOUND,
+            )
 
 
 class LoginUserView(GenericAPIView):
@@ -89,3 +101,9 @@ class LoginUserView(GenericAPIView):
             return Response(
                 {"message": "You are not logged in"}, status=HTTP_400_BAD_REQUEST
             )
+
+
+class LogoutUserView(APIView):
+    def post(self, request):
+        logout(self.request)
+        return Response(status=HTTP_205_RESET_CONTENT)
