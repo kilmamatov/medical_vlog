@@ -31,11 +31,3 @@ class PostSerializer(serializers.ModelSerializer):
             post.tags.add(tag)
 
         return post
-
-
-# class UserProfile(serializers.ModelSerializer):
-#     post = PostSerializer
-#
-#     class Meta:
-#         model = UserModel
-#         fields = ("username",)
