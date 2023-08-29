@@ -5,11 +5,10 @@ from rest_framework_simplejwt.views import (
 )
 
 from user_auth.views import (
-    RegisterUserView,
-    UserModelView,
-    # LoginUserView,
     LogoutUserView,
     MyTokenObtainPairView,
+    RegisterUserView,
+    UserModelView,
 )
 
 auth = [
