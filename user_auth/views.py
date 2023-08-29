@@ -45,7 +45,7 @@ class UserModelView(GenericAPIView):
     serializer_class = UserProfileSerializer
     # authentication_classes = (SessionAuthentication,)
     # permission_classes = [IsAuthenticated]
-    
+
     def patch(self, request, pk):
         try:
             user = UserModel.objects.get(pk=pk)
