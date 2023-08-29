@@ -1,7 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.generics import GenericAPIView
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import (
     HTTP_200_OK,
@@ -9,6 +8,7 @@ from rest_framework.status import (
     HTTP_204_NO_CONTENT,
     HTTP_400_BAD_REQUEST,
     HTTP_404_NOT_FOUND,
+    HTTP_205_RESET_CONTENT,
 )
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -43,10 +43,9 @@ class RegisterUserView(GenericAPIView):
 class UserModelView(GenericAPIView):
     queryset = UserModel
     serializer_class = UserProfileSerializer
-
     # authentication_classes = (SessionAuthentication,)
     # permission_classes = [IsAuthenticated]
-
+    
     def patch(self, request, pk):
         try:
             user = UserModel.objects.get(pk=pk)
