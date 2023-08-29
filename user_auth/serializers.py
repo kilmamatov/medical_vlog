@@ -30,8 +30,3 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "photo",
             "description",
         )
-
-
-class LoginUserSerializer(serializers.Serializer):
-    username = serializers.CharField()
-    password = serializers.CharField()

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from core.models import PostModel, TagModel, CommentModel
+from core.models import CommentModel, PostModel, TagModel
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -10,10 +10,9 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = CommentModel
-        fields = ['text']
+        fields = ["text"]
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -32,11 +31,3 @@ class PostSerializer(serializers.ModelSerializer):
             post.tags.add(tag)
 
         return post
-
-
-# class UserProfile(serializers.ModelSerializer):
-#     post = PostSerializer
-#
-#     class Meta:
-#         model = UserModel
-#         fields = ("username",)
