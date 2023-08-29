@@ -1,12 +1,19 @@
 from rest_framework import serializers
 
-from core.models import PostModel, TagModel
+from core.models import PostModel, TagModel, CommentModel
 
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = TagModel
         fields = "__all__"
+
+
+class CommentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CommentModel
+        fields = ['text']
 
 
 class PostSerializer(serializers.ModelSerializer):
