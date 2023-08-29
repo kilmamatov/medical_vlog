@@ -4,7 +4,6 @@ from django.urls import reverse
 from django.utils.text import slugify
 
 from core.utils import translate_word
-
 from user_auth.models import UserModel
 
 
