@@ -1,6 +1,4 @@
 from django.contrib import admin
-from core.models import PostModel, TagModel, CommentModel
-
 
 from core.models import CommentModel, PostModel, TagModel
 

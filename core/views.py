@@ -1,8 +1,6 @@
-from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from core.filters import TagFilters
@@ -25,7 +23,6 @@ class PostViewSet(ModelViewSet):
     authentication_classes = (SessionAuthentication,)
     permission_classes = [IsAuthenticated]
     lookup_field = "slug"
-
 
     def perform_create(self, serializer):
         serializer.validated_data["user"] = self.request.user
