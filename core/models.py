@@ -1,10 +1,8 @@
-import uuid
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 
-from core.utils import translate_word
-
+from core.utils import random_string
 from user_auth.models import UserModel
 
 
@@ -38,8 +36,7 @@ class PostModel(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            title = translate_word(self.title)
-            self.slug = slugify(f"{self.user.username}//{title}")
+            self.slug = slugify(f"{random_string()}")
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
