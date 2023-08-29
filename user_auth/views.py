@@ -1,16 +1,19 @@
 from django.contrib.auth import login, authenticate, logout
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.generics import GenericAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,
     HTTP_400_BAD_REQUEST,
     HTTP_404_NOT_FOUND,
-    HTTP_205_RESET_CONTENT,
+    HTTP_205_RESET_CONTENT, HTTP_204_NO_CONTENT,
 )
 from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.token_blacklist.models import OutstandingToken
+from rest_framework_simplejwt.tokens import RefreshToken, UntypedToken
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from user_auth.models import UserModel
 from user_auth.serializers import (
@@ -42,6 +45,7 @@ class RegisterUserView(GenericAPIView):
 class UserModelView(GenericAPIView):
     queryset = UserModel
     serializer_class = UserProfileSerializer
+
     # authentication_classes = (SessionAuthentication,)
     # permission_classes = [IsAuthenticated]
 
@@ -75,34 +79,54 @@ class UserModelView(GenericAPIView):
             )
 
 
-class LoginUserView(GenericAPIView):
-    serializer_class = LoginUserSerializer
+# class LoginUserView(GenericAPIView):
+#     serializer_class = LoginUserSerializer
+#
+#     def post(self, *args):
+#         username = self.request.data["username"]
+#         password = self.request.data["password"]
+#         check_user = UserModel.objects.get(username=self.request.data["username"])
+#         if check_user.DoesNotExist:
+#             return Response(
+#                 {"message": "User does not exist, try again"}, status=HTTP_404_NOT_FOUND
+#             )
+#         user = authenticate(username=username, password=password)
+#         if user is not None:
+#             login(self.request, user)
+#             if self.request.user.is_authenticated:
+#                 refresh = RefreshToken.for_user(user)
+#                 tokens = {
+#                     "message": "You have successfully logged in",
+#                     "refresh": str(refresh),
+#                     "access": str(refresh.access_token),
+#                 }
+#                 return Response(tokens, status=HTTP_200_OK)
+#             return Response(
+#                 {"message": "You are not logged in"}, status=HTTP_400_BAD_REQUEST
+#             )
 
-    def post(self, *args):
+
+class MyTokenObtainPairView(TokenObtainPairView):
+
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
         username = self.request.data["username"]
         password = self.request.data["password"]
-        check_user = UserModel.objects.get(username=self.request.data["username"])
-        if not check_user:
-            return Response(
-                {"message": "User does not exist, try again"}, status=HTTP_404_NOT_FOUND
-            )
         user = authenticate(username=username, password=password)
         if user is not None:
             login(self.request, user)
             if self.request.user.is_authenticated:
-                refresh = RefreshToken.for_user(user)
-                tokens = {
-                    "message": "You have successfully logged in",
-                    "refresh": str(refresh),
-                    "access": str(refresh.access_token),
-                }
-                return Response(tokens, status=HTTP_200_OK)
-            return Response(
-                {"message": "You are not logged in"}, status=HTTP_400_BAD_REQUEST
-            )
+                response.data['user_id'] = self.request.user.id
+                response.data['username'] = self.request.user.username
+        return response
 
 
 class LogoutUserView(APIView):
+    permission_classes = [IsAuthenticated, ]
+
     def post(self, request):
         logout(self.request)
+        token_to_black_list = request.data['refresh_token']
+        token = RefreshToken(token_to_black_list)
+        token.blacklist()
         return Response(status=HTTP_205_RESET_CONTENT)

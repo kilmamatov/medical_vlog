@@ -144,9 +144,9 @@ REST_FRAMEWORK = {
     "DATE_INPUT_FORMATS": DATE_INPUT_FORMATS,
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
     "DATETIME_FORMAT": "%Y-%m-%d %H:%M:%S",
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
 }
 
 # Internationalization
