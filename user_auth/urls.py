@@ -5,17 +5,17 @@ from rest_framework_simplejwt.views import (
 )
 
 from user_auth.views import (
+    LogoutUserView,
+    MyTokenObtainPairView,
     RegisterUserView,
     UserModelView,
-    LoginUserView,
-    LogoutUserView,
 )
 
 auth = [
     path("create_user/", RegisterUserView.as_view()),
     path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("token-refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-    path("login/", LoginUserView.as_view(), name="login"),
+    path("login/", MyTokenObtainPairView.as_view(), name="login"),
     path("logout/", LogoutUserView.as_view(), name="logout"),
 ]
 
