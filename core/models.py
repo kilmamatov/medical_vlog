@@ -1,8 +1,8 @@
-import uuid
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
-from autoslug import AutoSlugField
+
+from core.utils import translate_word
 from user_auth.models import UserModel
 
 
@@ -36,11 +36,12 @@ class PostModel(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(f"{self.title}-{self.user.username}")
+            title = translate_word(self.title)
+            self.slug = slugify(f"{self.user.username}//{title}")
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('post', args=[str(self.slug)])
+        return reverse("post", args=[str(self.slug)])
 
     def __str__(self):
         return self.title
