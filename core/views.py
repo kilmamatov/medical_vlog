@@ -6,8 +6,8 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from core.filters import TagFilters
-from core.models import PostModel, TagModel, CommentModel
-from core.serializers import PostSerializer, TagSerializer, CommentSerializer
+from core.models import CommentModel, PostModel, TagModel
+from core.serializers import CommentSerializer, PostSerializer, TagSerializer
 
 
 class TagViewSet(ModelViewSet):
@@ -24,7 +24,8 @@ class PostViewSet(ModelViewSet):
     serializer_class = PostSerializer
     authentication_classes = (SessionAuthentication,)
     permission_classes = [IsAuthenticated]
-    lookup_field = 'slug'
+    lookup_field = "slug"
+
 
     def perform_create(self, serializer):
         serializer.validated_data["user"] = self.request.user
@@ -38,6 +39,6 @@ class CommentViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        post_slug = self.kwargs['slug']
+        post_slug = self.kwargs["slug"]
         post = PostModel.objects.get(slug=post_slug)
         serializer.save(user=self.request.user, post=post)

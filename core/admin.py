@@ -2,6 +2,9 @@ from django.contrib import admin
 from core.models import PostModel, TagModel, CommentModel
 
 
+from core.models import CommentModel, PostModel, TagModel
+
+
 class CommentInline(admin.TabularInline):
     model = CommentModel
     extra = 1
@@ -22,4 +25,3 @@ class TagsAdmin(admin.ModelAdmin):
 @admin.register(CommentModel)
 class CommentAdmin(admin.ModelAdmin):
     list_display = ("user", "created_at")
-
