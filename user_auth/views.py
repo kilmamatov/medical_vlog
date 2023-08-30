@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.generics import GenericAPIView
+from rest_framework.parsers import FileUploadParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import (
@@ -43,6 +44,8 @@ class RegisterUserView(GenericAPIView):
 class UserModelView(GenericAPIView):
     queryset = UserModel
     serializer_class = UserProfileSerializer
+    parser_class = (FileUploadParser,)
+
     # authentication_classes = (SessionAuthentication,)
     # permission_classes = [IsAuthenticated]
 
@@ -56,7 +59,9 @@ class UserModelView(GenericAPIView):
             )
         for key, value in self.request.data.items():
             setattr(user, key, value)
-        serializer = self.serializer_class(data=request.data, instance=user)
+        serializer = self.serializer_class(
+            data=request.data, instance=user, partial=True,
+        )
         serializer.is_valid(raise_exception=True)
         user.save()
         return Response(serializer.data, status=HTTP_200_OK)
