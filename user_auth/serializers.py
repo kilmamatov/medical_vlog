@@ -30,3 +30,16 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "photo",
             "description",
         )
+
+
+class UserAddPhoto(serializers.Serializer):
+    photo = serializers.ImageField()
+
+    class Meta:
+        model = UserModel
+
+    def create(self, validated_data):
+        user = self.context["request"].user
+        user.photo = validated_data["photo"]
+        user.save(update_fields=["photo"])
+        return user
