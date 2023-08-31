@@ -1,8 +1,11 @@
+from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from core.views import CommentViewSet, PostViewSet, TagViewSet
+from core.views import CommentViewSet, PostViewSet, TagViewSet, NewsAPIView
 
-urlpatterns = []
+urlpatterns = [
+    path('news-api/', NewsAPIView.as_view(), name='news-api')
+]
 
 router = DefaultRouter()
 router.register("tags", TagViewSet, basename="tag")
