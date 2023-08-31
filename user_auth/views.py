@@ -60,7 +60,9 @@ class UserModelView(GenericAPIView):
         for key, value in self.request.data.items():
             setattr(user, key, value)
         serializer = self.serializer_class(
-            data=request.data, instance=user, partial=True,
+            data=request.data,
+            instance=user,
+            partial=True,
         )
         serializer.is_valid(raise_exception=True)
         user.save()
