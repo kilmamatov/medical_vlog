@@ -36,7 +36,12 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
         max_length=20,
         unique=True,
     )
-    photo = models.ImageField(verbose_name="Фотография", blank=True, null=True)
+    photo = models.ImageField(
+        verbose_name="Фотография",
+        blank=True,
+        null=True,
+        upload_to="static/",
+    )
     description = models.TextField(verbose_name="Описание", blank=True)
     is_active = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)

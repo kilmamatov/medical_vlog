@@ -26,9 +26,15 @@ class PostModel(models.Model):
     )
     title = models.CharField("Тема", max_length=255)
     text = models.TextField(verbose_name="Описание")
-    photo = models.ImageField(verbose_name="Фото", blank=True, null=True)
+    photo = models.ImageField(
+        verbose_name="Фотография",
+        blank=True,
+        null=True,
+        upload_to="static/",
+    )
     tags = models.ManyToManyField(TagModel, related_name="posts", blank=True)
     slug = models.SlugField(unique=True, blank=True)
+    created_at = models.DateTimeField(verbose_name="Время создания", auto_now_add=True)
 
     class Meta:
         verbose_name = "Пост"
@@ -58,8 +64,14 @@ class CommentModel(models.Model):
         on_delete=models.CASCADE,
         related_name="comments",
     )
+    photo = models.ImageField(
+        verbose_name="Фотография",
+        blank=True,
+        null=True,
+        upload_to="static/",
+    )
     text = models.TextField(verbose_name="Текст комментария")
-    created_at = models.DateTimeField(verbose_name="Время создания", auto_now_add=True)
+    created_at = models.DateTimeField(verbose_name="Время создания", auto_now=True)
 
     class Meta:
         ordering = ("created_at",)
