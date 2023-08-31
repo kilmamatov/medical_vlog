@@ -20,10 +20,9 @@ class TagViewSet(ModelViewSet):
 class PostViewSet(ModelViewSet):
     queryset = PostModel.objects.all()
     serializer_class = PostSerializer
-    authentication_classes = (SessionAuthentication,)
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = (SessionAuthentication,)
+    # permission_classes = [IsAuthenticated]
     lookup_field = "slug"
-
 
     def perform_create(self, serializer):
         serializer.validated_data["user"] = self.request.user
