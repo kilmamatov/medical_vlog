@@ -24,7 +24,6 @@ class PostViewSet(ModelViewSet):
     # permission_classes = [IsAuthenticated]
     lookup_field = "slug"
 
-
     def perform_create(self, serializer):
         serializer.validated_data["user"] = self.request.user
         serializer.save()
