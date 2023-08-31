@@ -79,6 +79,13 @@ DATABASES = {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     },
+    'redis_db': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://172.17.0.4:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
 }
 
 SIMPLE_JWT = {
@@ -176,3 +183,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "user_auth.UserModel"
 
 LOGIN_URL = "/admin/login/"
+
+
