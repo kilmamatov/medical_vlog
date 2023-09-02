@@ -13,7 +13,7 @@ class CommentInline(admin.TabularInline):
 
 @admin.register(PostModel)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ("title",)
+    list_display = ("title", "total_likes", "total_comment")
     readonly_fields = ("slug",)
     inlines = [CommentInline]
 
@@ -25,4 +25,4 @@ class TagsAdmin(admin.ModelAdmin):
 
 @admin.register(CommentModel)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ("user", "created_at")
+    list_display = ("user", "total_likes", "created_at")
