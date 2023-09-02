@@ -3,9 +3,6 @@ from django.contrib import admin
 from core.models import CommentModel, PostModel, TagModel
 
 
-from core.models import CommentModel, PostModel, TagModel
-
-
 class CommentInline(admin.TabularInline):
     model = CommentModel
     extra = 1

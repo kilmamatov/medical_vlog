@@ -50,10 +50,10 @@ class CommentViewSet(CommentLikedMixin, ModelViewSet):
 
 class NewsAPIView(APIView):
     def get(self, request):
-        url = 'https://newsapi.org/v2/top-headlines'
+        url = "https://newsapi.org/v2/top-headlines"
         params = {
-            'country': 'ru',
-            'apiKey': os.getenv('NEWS_API_KEY'),
+            "country": "ru",
+            "apiKey": os.getenv("NEWS_API_KEY"),
         }
         response = requests.get(url, params=params)
         data = response.json()

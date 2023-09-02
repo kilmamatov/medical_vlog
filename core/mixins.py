@@ -5,13 +5,13 @@ from core import services
 
 
 class PostLikedMixin:
-    @action(methods=['POST'], detail=True)
+    @action(methods=["POST"], detail=True)
     def like_post(self, request, slug=None):
         obj = self.get_object()
         services.add_like(obj, request.user)
         return Response()
 
-    @action(methods=['POST'], detail=True)
+    @action(methods=["POST"], detail=True)
     def unlike_post(self, request, slug=None):
         obj = self.get_object()
         services.remove_like(obj, request.user)
@@ -19,13 +19,13 @@ class PostLikedMixin:
 
 
 class CommentLikedMixin:
-    @action(methods=['POST'], detail=True)
+    @action(methods=["POST"], detail=True)
     def like_comment(self, request, slug=None, pk=None):
         obj = self.get_object()
         services.add_like(obj, request.user)
         return Response()
 
-    @action(methods=['POST'], detail=True)
+    @action(methods=["POST"], detail=True)
     def unlike_comment(self, request, slug=None, pk=None):
         obj = self.get_object()
         services.remove_like(obj, request.user)

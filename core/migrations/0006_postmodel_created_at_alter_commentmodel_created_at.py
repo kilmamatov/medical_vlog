@@ -13,7 +13,8 @@ class Migration(migrations.Migration):
             model_name="postmodel",
             name="created_at",
             field=models.DateTimeField(
-                auto_now_add=True, verbose_name="Время создания",
+                auto_now_add=True,
+                verbose_name="Время создания",
             ),
             preserve_default=False,
         ),
