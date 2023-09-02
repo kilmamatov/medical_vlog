@@ -3,9 +3,6 @@ from django.contrib import admin
 from core.models import CommentModel, PostModel, TagModel
 
 
-from core.models import CommentModel, PostModel, TagModel
-
-
 class CommentInline(admin.TabularInline):
     model = CommentModel
     extra = 1
@@ -13,7 +10,7 @@ class CommentInline(admin.TabularInline):
 
 @admin.register(PostModel)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ("title",)
+    list_display = ("title", "total_likes", "total_comment")
     readonly_fields = ("slug",)
     inlines = [CommentInline]
 
@@ -25,4 +22,4 @@ class TagsAdmin(admin.ModelAdmin):
 
 @admin.register(CommentModel)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ("user", "created_at")
+    list_display = ("user", "total_likes", "created_at")
