@@ -28,7 +28,7 @@ class LikeModel(models.Model):
     )
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey('content_type', 'object_id')
+    content_object = GenericForeignKey("content_type", "object_id")
 
 
 class PostModel(models.Model):
@@ -60,6 +60,7 @@ class PostModel(models.Model):
             while PostModel.objects.filter(slug=slug).exists():
                 slug = slugify(f"{random_string()}")
             self.slug = slug
+        super().save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse("post", args=[str(self.slug)])
