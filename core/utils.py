@@ -17,9 +17,8 @@ redis_instance = redis.StrictRedis(
 )
 
 
-def manage_items_to_redis_save(*args):
-    key = "articles"
-    value = args[0]
+def manage_items_to_redis_save(key, data):
+    value = data.get(key)
     value_str = json.dumps(value)
     redis_instance.set(key, value_str, ex=60)
     return {"msg": f"{key} successfully set to {value}"}
