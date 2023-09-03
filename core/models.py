@@ -60,6 +60,7 @@ class PostModel(models.Model):
             while PostModel.objects.filter(slug=slug).exists():
                 slug = slugify(f"{random_string()}")
             self.slug = slug
+        super().save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse("post", args=[str(self.slug)])
