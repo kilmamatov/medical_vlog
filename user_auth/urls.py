@@ -9,6 +9,7 @@ from user_auth.views import (
     MyTokenObtainPairView,
     RegisterUserView,
     UserModelView,
+    VerifyEmail,
 )
 
 auth = [
@@ -17,6 +18,7 @@ auth = [
     path("token-refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("login/", MyTokenObtainPairView.as_view(), name="login"),
     path("logout/", LogoutUserView.as_view(), name="logout"),
+    path("email-verify/", VerifyEmail.as_view(), name="email-verify"),
 ]
 
 urlpatterns = [
