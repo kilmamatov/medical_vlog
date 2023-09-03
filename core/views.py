@@ -53,5 +53,5 @@ class NewsAPIView(APIView):
         }
         response = requests.get(url, params=params)
         data = response.json()
-        manage_items_to_redis_save(data)
+        manage_items_to_redis_save("articles", data)
         return Response(data)
