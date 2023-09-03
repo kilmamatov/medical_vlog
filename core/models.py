@@ -1,8 +1,8 @@
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
-from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
-from django.contrib.contenttypes.models import ContentType
 
 from core.utils import random_string
 from user_auth.models import UserModel
@@ -47,7 +47,7 @@ class PostModel(models.Model):
     )
     tags = models.ManyToManyField(TagModel, related_name="posts", blank=True)
     slug = models.SlugField(unique=True, blank=True)
-    likes = GenericRelation(LikeModel)
+    likes = GenericRelation(LikeModel, null=True, blank=True)
     created_at = models.DateTimeField(verbose_name="Время создания", auto_now_add=True)
 
     class Meta:

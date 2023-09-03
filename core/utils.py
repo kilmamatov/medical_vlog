@@ -11,7 +11,9 @@ def random_string(x: int = 10):
 
 
 redis_instance = redis.StrictRedis(
-    host=os.getenv("REDIS_HOST"), port=os.getenv("REDIS_PORT"), db=0
+    host=os.getenv("REDIS_HOST"),
+    port=os.getenv("REDIS_PORT"),
+    db=0,
 )
 
 
@@ -19,5 +21,5 @@ def manage_items_to_redis_save(*args):
     key = "articles"
     value = args[0]
     value_str = json.dumps(value)
-    redis_instance.set(key, value_str)
+    redis_instance.set(key, value_str, ex=60)
     return {"msg": f"{key} successfully set to {value}"}

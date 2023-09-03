@@ -7,6 +7,7 @@ class RegisterUser(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField(min_length=8)
     password_again = serializers.CharField(min_length=8)
+    email = serializers.CharField(max_length=30)
 
     @staticmethod
     def validate_username(value):
@@ -30,3 +31,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "photo",
             "description",
         )
+
+
+class EmailVerificationSerializer(serializers.Serializer):
+    token = serializers.CharField(max_length=555)

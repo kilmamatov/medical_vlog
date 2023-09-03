@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from core.filters import TagFilters
-from core.mixins import PostLikedMixin, CommentLikedMixin
+from core.mixins import CommentLikedMixin
 from core.models import CommentModel, PostModel, TagModel
 from core.serializers import CommentSerializer, PostSerializer, TagSerializer
 from core.utils import manage_items_to_redis_save
@@ -24,16 +24,12 @@ class TagViewSet(ModelViewSet):
     filterset_class = TagFilters
 
 
-class PostViewSet(PostLikedMixin, ModelViewSet):
+class PostViewSet(ModelViewSet):
     queryset = PostModel.objects.all()
     serializer_class = PostSerializer
-    authentication_classes = (SessionAuthentication,)
+    # authentication_classes = (SessionAuthentication,)
     permission_classes = [IsAuthenticated]
     lookup_field = "slug"
-
-    def perform_create(self, serializer):
-        serializer.validated_data["user"] = self.request.user
-        serializer.save()
 
 
 class CommentViewSet(CommentLikedMixin, ModelViewSet):
