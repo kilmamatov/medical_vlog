@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from core.views import CommentViewSet, PostViewSet, TagViewSet, NewsAPIView
+from core.views import CommentViewSet, NewsAPIView, PostViewSet, TagViewSet
 
 urlpatterns = [path("news-api/", NewsAPIView.as_view(), name="news-api")]
 
