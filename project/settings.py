@@ -31,7 +31,6 @@ INSTALLED_APPS = [
     "drf_yasg",
     "django_filters",
     "rest_framework",
-    "rest_framework.authtoken",
     "user_auth",
     "core",
     "rest_framework_simplejwt.token_blacklist",

@@ -3,6 +3,8 @@ from rest_framework.routers import DefaultRouter
 
 from core.views import CommentViewSet, NewsAPIView, PostViewSet, TagViewSet
 
+app_name = "core"
+
 urlpatterns = [path("news-api/", NewsAPIView.as_view(), name="news-api")]
 
 router = DefaultRouter()
