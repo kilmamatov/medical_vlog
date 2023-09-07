@@ -20,10 +20,10 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PostModel
-        fields = ["tags", "title", "text", "photo"]
+        fields = ["tags", "title", "text", "photo", "slug"]
 
     def create(self, validated_data):
-        tags_data = validated_data.pop("tags")
+        tags_data = validated_data.pop("tags", [])
         post = PostModel.objects.create(**validated_data)
         for tag_data in tags_data:
             tag, created = TagModel.objects.get_or_create(**tag_data)
