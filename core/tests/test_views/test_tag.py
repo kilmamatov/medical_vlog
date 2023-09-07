@@ -5,14 +5,14 @@ from rest_framework.test import APIClient
 
 
 from core.models import TagModel
-from user_auth.models import UserModel
 from core import factories
 
 
 class TagViewSetTestCase(TestCase):
     def setUp(self):
-        self.user = UserModel.objects.create_user(username='testuser12', password='testpassss', email='yrgfuerfg@mail.ru')
+        self.user = factories.User()
         self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
         self.tag = factories.Tag()
 
     def test_list_tags(self):
