@@ -12,8 +12,10 @@ from user_auth.views import (
     VerifyEmail,
 )
 
+app_name = "user_auth"
+
 auth = [
-    path("create_user/", RegisterUserView.as_view()),
+    path("create_user/", RegisterUserView.as_view(), name="registration"),
     path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("token-refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("login/", MyTokenObtainPairView.as_view(), name="login"),

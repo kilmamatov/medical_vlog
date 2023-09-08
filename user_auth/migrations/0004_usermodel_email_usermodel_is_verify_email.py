@@ -13,7 +13,11 @@ class Migration(migrations.Migration):
             model_name="usermodel",
             name="email",
             field=models.EmailField(
-                blank=True, max_length=30, null=True, unique=True, verbose_name="Почта",
+                blank=True,
+                max_length=30,
+                null=True,
+                unique=True,
+                verbose_name="Почта",
             ),
         ),
         migrations.AddField(

@@ -29,6 +29,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = (
             "username",
             "photo",
+            "email",
             "description",
         )
 
