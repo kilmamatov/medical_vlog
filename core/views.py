@@ -18,8 +18,8 @@ from core.utils import manage_items_to_redis_save
 class TagViewSet(ModelViewSet):
     queryset = TagModel.objects.all()
     serializer_class = TagSerializer
-    # authentication_classes = (SessionAuthentication,)
-    # permission_classes = [IsAuthenticated]
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
     filterset_class = TagFilters
 
@@ -27,16 +27,20 @@ class TagViewSet(ModelViewSet):
 class PostViewSet(ModelViewSet):
     queryset = PostModel.objects.all()
     serializer_class = PostSerializer
-    # authentication_classes = (SessionAuthentication,)
-    # permission_classes = [IsAuthenticated]
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = [IsAuthenticated]
     lookup_field = "slug"
+
+    def perform_create(self, serializer):
+        serializer.validated_data["user"] = self.request.user
+        serializer.save()
 
 
 class CommentViewSet(CommentLikedMixin, ModelViewSet):
     queryset = CommentModel.objects.all()
     serializer_class = CommentSerializer
-    # authentication_classes = (SessionAuthentication,)
-    # permission_classes = [IsAuthenticated]
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         post_slug = self.kwargs["slug"]
