@@ -12,6 +12,8 @@ from user_auth.views import (
     VerifyEmail,
 )
 
+app_name = "user_auth"
+
 auth = [
     path("create_user/", RegisterUserView.as_view(), name="registration"),
     path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),

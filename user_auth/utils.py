@@ -20,7 +20,7 @@ class Supporting:
     @staticmethod
     def send_email(request, user):
         current_site = get_current_site(request).domain
-        relative_link = reverse("email-verify")
+        relative_link = reverse("user_auth:email-verify")
         token = RefreshToken.for_user(user)
         abs_url = "http://" + current_site + relative_link + "?token=" + str(token)
         email_body = (

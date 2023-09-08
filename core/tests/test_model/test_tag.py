@@ -1,6 +1,5 @@
 from django.test import TestCase
 
-from core import models
 from core import factories
 
 
@@ -12,4 +11,4 @@ class Tag(TestCase):
         """
         Тест строки
         """
-        self.assertEqual(str(self.tag), self.tag.name, "проверка строкового метода")
+        assert str(self.tag) == self.tag.name, "проверка строкового метода"

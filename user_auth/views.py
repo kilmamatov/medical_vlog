@@ -65,25 +65,32 @@ class UserModelView(GenericAPIView):
                 {"message": "User does not exist, try again"},
                 status=HTTP_404_NOT_FOUND,
             )
-        for key, value in self.request.data.items():
-            setattr(user, key, value)
-        serializer = self.serializer_class(
-            data=request.data,
-            instance=user,
-            partial=True,
-        )
-        serializer.is_valid(raise_exception=True)
-        user.save()
+        if self.request.user.pk == user.pk:
+            for key, value in self.request.data.items():
+                setattr(user, key, value)
+            serializer = self.serializer_class(
+                data=request.data,
+                instance=user,
+                partial=True,
+            )
+            serializer.is_valid(raise_exception=True)
+            user.save()
+        else:
+            return Response(
+                {"message": "User does have permission for changed"},
+                status=HTTP_400_BAD_REQUEST,
+            )
         return Response(serializer.data, status=HTTP_200_OK)
 
     def delete(self, request, pk):
         try:
             user = UserModel.objects.get(pk=pk)
-            user.delete()
-            return Response(
-                {"message": "User successfully deleted"},
-                status=HTTP_200_OK,
-            )
+            if self.request.user.pk == user.pk:
+                user.delete()
+                return Response(
+                    {"message": "User successfully deleted"},
+                    status=HTTP_200_OK,
+                )
         except ObjectDoesNotExist:
             return Response(
                 {"message": "User does not exist, try again"},
