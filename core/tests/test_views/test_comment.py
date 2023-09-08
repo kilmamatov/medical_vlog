@@ -3,9 +3,8 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
-
-from core.models import CommentModel
 from core import factories
+from core.models import CommentModel
 
 
 class CommentViewSetTestCase(TestCase):
@@ -20,26 +19,30 @@ class CommentViewSetTestCase(TestCase):
         """
         Получаем список comment
         """
-        url = reverse('core:comment-list', kwargs={'slug': self.post.slug})
+        url = reverse("core:comment-list", kwargs={"slug": self.post.slug})
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), CommentModel.objects.count(), msg='Сверяем количество созданных постов')
+        assert response.status_code == status.HTTP_200_OK
+        assert (
+            len(response.data) == CommentModel.objects.count()
+        ), "Сверяем количество созданных постов"
 
     def test_create_comment(self):
         """
         Создание comment
         """
-        url = reverse('core:comment-list', kwargs={'slug': self.post.slug})
+        url = reverse("core:comment-list", kwargs={"slug": self.post.slug})
         data = {
-            'text': self.comment.text,
+            "text": self.comment.text,
         }
         response = self.client.post(url, data)
 
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        assert response.status_code == status.HTTP_201_CREATED
         self.assertEqual(
-            CommentModel.objects.filter(text=data["text"]).first().text,  # нужно сделать более сложный алгоритм
-            response.data['text'],
-            msg='Сверяем text из БД и тела запроса'
+            CommentModel.objects.filter(text=data["text"])
+            .first()
+            .text,  # нужно сделать более сложный алгоритм
+            response.data["text"],
+            msg="Сверяем text из БД и тела запроса",
         )
 
     # def test_retrieve_post(self):

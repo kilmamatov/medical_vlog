@@ -1,13 +1,10 @@
-import datetime
-
 import factory
 from faker import Factory
 
-from core.models import TagModel, PostModel, CommentModel
+from core.models import CommentModel, PostModel, TagModel
 from user_auth.models import UserModel
 
-
-factory_ru = Factory.create('ru_RU')
+factory_ru = Factory.create("ru_RU")
 
 
 class Tag(factory.django.DjangoModelFactory):
@@ -18,9 +15,9 @@ class Tag(factory.django.DjangoModelFactory):
 
 
 class User(factory.django.DjangoModelFactory):
-    username = factory.Sequence(lambda n: 'user%d' % n)
-    password = factory.Sequence(lambda n: '7859375jehfwe%d' % n)
-    email = factory.Sequence(lambda n: f'user{n}@example.com')
+    username = factory.Sequence(lambda n: "user%d" % n)
+    password = factory.Sequence(lambda n: "7859375jehfwe%d" % n)
+    email = factory.Sequence(lambda n: f"user{n}@example.com")
 
     class Meta:
         model = UserModel
