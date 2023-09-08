@@ -14,9 +14,10 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, password):
+    def create_superuser(self, username, email, password):
         user = self.create_user(
             username=username,
+            email=email,
             password=password,
         )
         user.is_superuser = True
@@ -42,7 +43,11 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     )
     description = models.TextField(verbose_name="Описание", blank=True)
     email = models.EmailField(
-        max_length=30, verbose_name="Почта", unique=True, null=True, blank=True,
+        max_length=30,
+        verbose_name="Почта",
+        unique=True,
+        null=True,
+        blank=True,
     )
     is_verify_email = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)

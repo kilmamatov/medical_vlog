@@ -138,7 +138,8 @@ class VerifyEmail(APIView):
             return Response({"email": "Successfully activated"}, status=HTTP_200_OK)
         except jwt.ExpiredSignatureError:
             return Response(
-                {"error": "Activation Expired"}, status=HTTP_400_BAD_REQUEST,
+                {"error": "Activation Expired"},
+                status=HTTP_400_BAD_REQUEST,
             )
         except jwt.exceptions.DecodeError:
             return Response({"error": "Invalid token"}, status=HTTP_400_BAD_REQUEST)

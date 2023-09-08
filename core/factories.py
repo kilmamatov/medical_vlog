@@ -7,7 +7,7 @@ from core.models import TagModel
 from user_auth.models import UserModel
 
 
-factory_ru = Factory.create('ru_RU')
+factory_ru = Factory.create("ru_RU")
 
 
 class Tag(factory.django.DjangoModelFactory):
