@@ -6,7 +6,9 @@ from user_auth.models import UserModel
 class UserTestCase(TestCase):
     def setUp(self):
         self.user = UserModel.objects.create_user(
-            username="testname", email="test@mail.ru", password="testpass",
+            username="testname",
+            email="test@mail.ru",
+            password="testpass",
         )
         self.super_user = UserModel.objects.create_superuser(
             username="supertestname",
@@ -21,5 +23,11 @@ class UserTestCase(TestCase):
 
     def test_create_super_user(self):
         assert self.super_user == UserModel.objects.get(username="supertestname")
-        assert self.super_user.email == UserModel.objects.get(email="supertest@mail.ru").email
-        assert self.super_user.username == UserModel.objects.get(username="supertestname").username
+        assert (
+            self.super_user.email
+            == UserModel.objects.get(email="supertest@mail.ru").email
+        )
+        assert (
+            self.super_user.username
+            == UserModel.objects.get(username="supertestname").username
+        )

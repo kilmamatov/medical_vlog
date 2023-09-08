@@ -24,7 +24,10 @@ class AuthUserTestCase(TestCase):
         }
         response = self.client.post(url, data)
         assert response.status_code == status.HTTP_201_CREATED
-        assert UserModel.objects.get(username=data["username"]).username == data["username"]
+        assert (
+            UserModel.objects.get(username=data["username"]).username
+            == data["username"]
+        )
 
     def test_update_info_user(self):
         url = reverse("user_auth:profile", args={self.user.pk})
@@ -34,27 +37,33 @@ class AuthUserTestCase(TestCase):
         }
         response = self.client.patch(url, data)
         assert response.status_code == status.HTTP_200_OK
-        assert UserModel.objects.get(username=data["username"]).username == data["username"]
-        assert UserModel.objects.get(username=data["username"]).description == data["description"]
+        assert (
+            UserModel.objects.get(username=data["username"]).username
+            == data["username"]
+        )
+        assert (
+            UserModel.objects.get(username=data["username"]).description
+            == data["description"]
+        )
 
     def test_bad_update_info_user(self):
-        url = reverse("user_auth:profile", args={self.user.pk+1})
+        url = reverse("user_auth:profile", args={self.user.pk + 1})
         data = {
             "username": "updatename",
             "description": "updatedescrip",
         }
         response = self.client.patch(url, data)
         assert response.status_code == status.HTTP_404_NOT_FOUND
-        assert response.json()['message'] == "User does not exist, try again"
+        assert response.json()["message"] == "User does not exist, try again"
 
     def test_delete_user(self):
         url = reverse("user_auth:profile", args={self.user.pk})
         response = self.client.delete(url)
         assert response.status_code == status.HTTP_200_OK
-        assert response.json()['message'] == "User successfully deleted"
+        assert response.json()["message"] == "User successfully deleted"
 
     def test_bad_delete_user(self):
-        url = reverse("user_auth:profile", args={self.user.pk+1})
+        url = reverse("user_auth:profile", args={self.user.pk + 1})
         response = self.client.delete(url)
         assert response.status_code == status.HTTP_404_NOT_FOUND
-        assert response.json()['message'] == "User does not exist, try again"
+        assert response.json()["message"] == "User does not exist, try again"

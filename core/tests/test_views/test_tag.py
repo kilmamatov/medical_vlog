@@ -21,7 +21,9 @@ class TagViewSetTestCase(TestCase):
         url = reverse("core:tag-list")
         response = self.client.get(url)
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == TagModel.objects.count(), "Сверяем количество созданных тэгов"
+        assert (
+            len(response.data) == TagModel.objects.count()
+        ), "Сверяем количество созданных тэгов"
 
     def test_create_tag(self):
         """
@@ -32,7 +34,9 @@ class TagViewSetTestCase(TestCase):
         response = self.client.post(url, data)
 
         assert response.status_code == status.HTTP_201_CREATED
-        assert response.data["name"] == data["name"], "Сверяем name из ответа и тела запроса"
+        assert (
+            response.data["name"] == data["name"]
+        ), "Сверяем name из ответа и тела запроса"
 
     def test_retrieve_tag(self):
         """
@@ -67,4 +71,6 @@ class TagViewSetTestCase(TestCase):
         response = self.client.delete(url)
 
         assert response.status_code == status.HTTP_204_NO_CONTENT
-        assert not TagModel.objects.filter(id=tag.id).exists(), "Проверяем на наличие в бд"
+        assert not TagModel.objects.filter(
+            id=tag.id,
+        ).exists(), "Проверяем на наличие в бд"

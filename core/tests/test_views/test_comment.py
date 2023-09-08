@@ -22,7 +22,9 @@ class CommentViewSetTestCase(TestCase):
         url = reverse("core:comment-list", kwargs={"slug": self.post.slug})
         response = self.client.get(url)
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == CommentModel.objects.count(), "Сверяем количество созданных постов"
+        assert (
+            len(response.data) == CommentModel.objects.count()
+        ), "Сверяем количество созданных постов"
 
     def test_create_comment(self):
         """

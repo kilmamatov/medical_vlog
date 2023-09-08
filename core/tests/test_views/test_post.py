@@ -21,7 +21,9 @@ class PostViewSetTestCase(TestCase):
         url = reverse("core:post-list")
         response = self.client.get(url)
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == PostModel.objects.count(), "Сверяем количество созданных постов"
+        assert (
+            len(response.data) == PostModel.objects.count()
+        ), "Сверяем количество созданных постов"
 
     def test_create_post(self):
         """
@@ -32,7 +34,10 @@ class PostViewSetTestCase(TestCase):
         response = self.client.post(url, data)
 
         assert response.status_code == status.HTTP_201_CREATED
-        assert PostModel.objects.filter(title=data["title"]).first().title == response.data["title"], "Сверяем title из БД и тела запроса"
+        assert (
+            PostModel.objects.filter(title=data["title"]).first().title
+            == response.data["title"]
+        ), "Сверяем title из БД и тела запроса"
 
     def test_retrieve_post(self):
         """
@@ -56,7 +61,9 @@ class PostViewSetTestCase(TestCase):
 
         assert response.status_code == status.HTTP_200_OK
         post.refresh_from_db()
-        assert post.title == data["title"], "Сравниваем обновленные данные c отправляемыми"
+        assert (
+            post.title == data["title"]
+        ), "Сравниваем обновленные данные c отправляемыми"
 
     def test_put_post(self):
         """
@@ -69,7 +76,9 @@ class PostViewSetTestCase(TestCase):
 
         assert response.status_code == status.HTTP_200_OK
         post.refresh_from_db()
-        assert post.title == data["title"], "Сравниваем обновленные данные c отправляемыми"
+        assert (
+            post.title == data["title"]
+        ), "Сравниваем обновленные данные c отправляемыми"
 
     def test_delete_tag(self):
         """
@@ -80,4 +89,6 @@ class PostViewSetTestCase(TestCase):
         response = self.client.delete(url)
 
         assert response.status_code == status.HTTP_204_NO_CONTENT
-        assert not PostModel.objects.filter(slug=post.slug).exists(), "Проверяем на наличие в бд"
+        assert not PostModel.objects.filter(
+            slug=post.slug,
+        ).exists(), "Проверяем на наличие в бд"
