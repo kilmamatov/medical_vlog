@@ -24,19 +24,21 @@ class CommentViewSetTestCase(TestCase):
         assert response.status_code == status.HTTP_200_OK
         assert (
             len(response.data) == CommentModel.objects.count()
-        ), "Сверяем количество созданных постов"
+        ), "Сверяем количество созданных comment"
 
-    def test_create_comment(self):
+    def test_create_comment(self):  # переделать
         """
         Создание comment
         """
-        url = reverse("core:comment-list", kwargs={"slug": self.post.slug})
+        post = self.post
+        url = reverse("core:comment-list", kwargs={"slug": post.slug})
         data = {
             "text": self.comment.text,
         }
         response = self.client.post(url, data)
 
         assert response.status_code == status.HTTP_201_CREATED
+        # self.assertEqual(post.total_comment, 1, msg="Проверяем количество созданных комментов к посту")
         self.assertEqual(
             CommentModel.objects.filter(text=data["text"])
             .first()
@@ -45,13 +47,70 @@ class CommentViewSetTestCase(TestCase):
             msg="Сверяем text из БД и тела запроса",
         )
 
-    # def test_retrieve_post(self):
-    #     """
-    #     Получение определенного post
-    #     """
-    #     post = self.post
-    #     url = reverse('core:post-detail', kwargs={'slug': post.slug})
-    #     response = self.client.get(url)
-    #
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
-    #     self.assertEqual(response.data["slug"], post.slug, msg='Сверяем slug из ответа и базы')
+    def test_retrieve_comment(self):
+        """
+        Получение определенного comment
+        """
+        post = self.post
+        comment = self.comment
+        url = reverse(
+            "core:comment-detail", kwargs={"slug": post.slug, "pk": comment.id}
+        )
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            response.data["text"], comment.text, msg="Сверяем text из ответа и базы"
+        )
+
+    def test_patch_comment(self):
+        """
+        Частичное Обновление comment
+        """
+        post = self.post
+        comment = self.comment
+        url = reverse(
+            "core:comment-detail", kwargs={"slug": post.slug, "pk": comment.id}
+        )
+        data = {"text": "Updated comment"}
+        response = self.client.patch(url, data)
+
+        assert response.status_code == status.HTTP_200_OK
+        comment.refresh_from_db()
+        assert (
+            comment.text == data["text"]
+        ), "Сравниваем обновленные данные c отправляемыми"
+
+    def test_put_comment(self):
+        """
+        Обновление comment
+        """
+        post = self.post
+        comment = self.comment
+        url = reverse(
+            "core:comment-detail", kwargs={"slug": post.slug, "pk": comment.id}
+        )
+        data = {"text": "Updated text comment"}
+        response = self.client.put(url, data)
+
+        assert response.status_code == status.HTTP_200_OK
+        comment.refresh_from_db()
+        assert (
+            comment.text == data["text"]
+        ), "Сравниваем обновленные данные c отправляемыми"
+
+    def test_delete_tag(self):
+        """
+        Удаление comment
+        """
+        post = self.post
+        comment = self.comment
+        url = reverse(
+            "core:comment-detail", kwargs={"slug": post.slug, "pk": comment.id}
+        )
+        response = self.client.delete(url)
+
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert not CommentModel.objects.filter(
+            id=comment.id,
+        ).exists(), "Проверяем на наличие в бд"
