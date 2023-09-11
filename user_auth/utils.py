@@ -12,7 +12,13 @@ class Supporting:
         current_site = get_current_site(request).domain
         relative_link = reverse("user_auth:email-verify")
         token = RefreshToken.for_user(user)
-        abs_url = "http://" + current_site + relative_link + "?token=" + str(token)
+        abs_url = (
+            "http://"
+            + current_site
+            + relative_link
+            + "?token="
+            + str(token.access_token)
+        )
         email_body = (
             "Hi "
             + user.username

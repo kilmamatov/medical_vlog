@@ -65,7 +65,7 @@ class NewsAPIView(APIView):
         except ConnectTimeout:
             return Response(
                 {
-                    "message": "Request has timed out"
+                    "message": "Request has timed out",
                 },
-                status=status.HTTP_408_REQUEST_TIMEOUT
+                status=status.HTTP_408_REQUEST_TIMEOUT,
             )

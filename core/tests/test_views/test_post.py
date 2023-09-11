@@ -52,7 +52,9 @@ class PostViewSetTestCase(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
-            response.data["slug"], post.slug, msg="Сверяем slug из ответа и базы"
+            response.data["slug"],
+            post.slug,
+            msg="Сверяем slug из ответа и базы",
         )
 
     def test_patch_post(self):
