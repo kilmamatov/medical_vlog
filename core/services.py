@@ -29,23 +29,23 @@ def remove_like(obj, user):
     ).delete()
 
 
-def is_fan(obj, user) -> bool:
-    """
-    Проверяет, лайкнул ли `user` `obj`.
-    """
-    if not user.is_authenticated:
-        return False
-    obj_type = ContentType.objects.get_for_model(obj)
-    likes = LikeModel.objects.filter(content_type=obj_type, object_id=obj.id, user=user)
-    return likes.exists()
-
-
-def get_fans(obj):
-    """
-    Получает всех пользователей, которые лайкнули `obj`.
-    """
-    obj_type = ContentType.objects.get_for_model(obj)
-    return UserModel.objects.filter(
-        likes__content_type=obj_type,
-        likes__object_id=obj.id,
-    )
+# def is_fan(obj, user) -> bool:
+#     """
+#     Проверяет, лайкнул ли `user` `obj`.
+#     """
+#     if not user.is_authenticated:
+#         return False
+#     obj_type = ContentType.objects.get_for_model(obj)
+#     likes = LikeModel.objects.filter(content_type=obj_type, object_id=obj.id, user=user)
+#     return likes.exists()
+#
+#
+# def get_fans(obj):
+#     """
+#     Получает всех пользователей, которые лайкнули `obj`.
+#     """
+#     obj_type = ContentType.objects.get_for_model(obj)
+#     return UserModel.objects.filter(
+#         likes__content_type=obj_type,
+#         likes__object_id=obj.id,
+#     )

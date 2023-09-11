@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from core.filters import TagFilters
-from core.mixins import CommentLikedMixin
+from core.mixins import CommentLikedMixin, PostLikedMixin
 from core.models import CommentModel, PostModel, TagModel
 from core.serializers import CommentSerializer, PostSerializer, TagSerializer
 from core.utils import manage_items_to_redis_save
@@ -26,7 +26,7 @@ class TagViewSet(ModelViewSet):
     filterset_class = TagFilters
 
 
-class PostViewSet(ModelViewSet):
+class PostViewSet(PostLikedMixin, ModelViewSet):
     queryset = PostModel.objects.all()
     serializer_class = PostSerializer
     # authentication_classes = (SessionAuthentication,)

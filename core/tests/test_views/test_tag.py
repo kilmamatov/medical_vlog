@@ -20,10 +20,12 @@ class TagViewSetTestCase(TestCase):
         """
         url = reverse("core:tag-list")
         response = self.client.get(url)
-        assert response.status_code == status.HTTP_200_OK
-        assert (
-            len(response.data) == TagModel.objects.count()
-        ), "Сверяем количество созданных тэгов"
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            len(response.data),
+            TagModel.objects.count(),
+            msg="Сверяем количество созданных тэгов",
+        )
 
     def test_create_tag(self):
         """
@@ -33,10 +35,12 @@ class TagViewSetTestCase(TestCase):
         data = {"name": "New Tag"}
         response = self.client.post(url, data)
 
-        assert response.status_code == status.HTTP_201_CREATED
-        assert (
-            response.data["name"] == data["name"]
-        ), "Сверяем name из ответа и тела запроса"
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(
+            response.data["name"],
+            data["name"],
+            msg="Сверяем name из ответа и тела запроса",
+        )
 
     def test_retrieve_tag(self):
         """
@@ -46,8 +50,8 @@ class TagViewSetTestCase(TestCase):
         url = reverse("core:tag-detail", args=[tag.id])
         response = self.client.get(url)
 
-        assert response.status_code == status.HTTP_200_OK
-        assert response.data["id"] == tag.id, "Сверяем id из ответа и базы"
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["id"], tag.id, msg="Сверяем id из ответа и базы")
 
     def test_update_tag(self):
         """
@@ -58,9 +62,11 @@ class TagViewSetTestCase(TestCase):
         data = {"name": "Updated Tag"}
         response = self.client.put(url, data)
 
-        assert response.status_code == status.HTTP_200_OK
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         tag.refresh_from_db()
-        assert tag.name == data["name"], "Сравниваем обновленные данные c отправляемыми"
+        self.assertEqual(
+            tag.name, data["name"], msg="Сравниваем обновленные данные c отправляемыми"
+        )
 
     def test_delete_tag(self):
         """
@@ -70,7 +76,9 @@ class TagViewSetTestCase(TestCase):
         url = reverse("core:tag-detail", args=[tag.id])
         response = self.client.delete(url)
 
-        assert response.status_code == status.HTTP_204_NO_CONTENT
-        assert not TagModel.objects.filter(
-            id=tag.id,
-        ).exists(), "Проверяем на наличие в бд"
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(
+            TagModel.objects.filter(id=tag.id).exists(),
+            False,
+            msg="Проверяем на наличие в бд",
+        )
