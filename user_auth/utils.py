@@ -1,19 +1,9 @@
 import os
-from threading import Thread
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.urls import reverse
 from rest_framework_simplejwt.tokens import RefreshToken
-
-
-class EmailThread(Thread):
-    def __init__(self, email):
-        self.email = email
-        Thread.__init__(self)
-
-    def run(self):
-        self.email.send()
 
 
 class Supporting:
@@ -35,4 +25,3 @@ class Supporting:
             recipient_list=[user.email],
             from_email=os.getenv("EMAIL_HOST_USER"),
         )
-        # EmailThread(send_mail).start()

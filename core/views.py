@@ -2,6 +2,8 @@ import os
 
 import requests
 from django_filters.rest_framework import DjangoFilterBackend
+from requests import ConnectTimeout
+from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -27,8 +29,8 @@ class TagViewSet(ModelViewSet):
 class PostViewSet(PostLikedMixin, ModelViewSet):
     queryset = PostModel.objects.all()
     serializer_class = PostSerializer
-    authentication_classes = (SessionAuthentication,)
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = (SessionAuthentication,)
+    # permission_classes = [IsAuthenticated]
     lookup_field = "slug"
 
     def perform_create(self, serializer):
@@ -55,7 +57,15 @@ class NewsAPIView(APIView):
             "country": "ru",
             "apiKey": os.getenv("NEWS_API_KEY"),
         }
-        response = requests.get(url, params=params)
-        data = response.json()
-        manage_items_to_redis_save("articles", data)
-        return Response(data)
+        try:
+            response = requests.get(url, params=params, timeout=(1.5, 2))
+            data = response.json()
+            manage_items_to_redis_save("articles", data)
+            return Response(data)
+        except ConnectTimeout:
+            return Response(
+                {
+                    "message": "Request has timed out"
+                },
+                status=status.HTTP_408_REQUEST_TIMEOUT
+            )

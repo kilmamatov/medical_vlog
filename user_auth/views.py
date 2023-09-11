@@ -54,8 +54,7 @@ class UserModelView(GenericAPIView):
     serializer_class = UserProfileSerializer
     parser_class = (FileUploadParser,)
 
-    # authentication_classes = (SessionAuthentication,)
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def patch(self, request, pk):
         try:
@@ -75,12 +74,14 @@ class UserModelView(GenericAPIView):
             )
             serializer.is_valid(raise_exception=True)
             user.save()
-        else:
-            return Response(
-                {"message": "User does have permission for changed"},
-                status=HTTP_400_BAD_REQUEST,
-            )
-        return Response(serializer.data, status=HTTP_200_OK)
+            return Response(serializer.data, status=HTTP_200_OK)
+        return None
+        # else:
+        #     return Response(
+        #         {"message": "User does have permission for changed"},
+        #         status=HTTP_400_BAD_REQUEST,
+        #     )
+
 
     def delete(self, request, pk):
         try:
@@ -109,18 +110,19 @@ class MyTokenObtainPairView(TokenObtainPairView):
             if self.request.user.is_authenticated:
                 response.data["user_id"] = self.request.user.id
                 response.data["username"] = self.request.user.username
-            else:
-                return Response(
-                    {"message": "wrong credentials, try again"},
-                    status=HTTP_400_BAD_REQUEST,
-                )
-        return response
+                return response
+            # else:
+            #     return Response(
+            #         {"message": "wrong credentials, try again"},
+            #         status=HTTP_400_BAD_REQUEST,
+            #     )
+        return None
+
 
 
 class LogoutUserView(APIView):
-    permission_classes = [
-        IsAuthenticated,
-    ]
+    permission_classes = (IsAuthenticated,)
+
 
     def post(self, request):
         logout(self.request)

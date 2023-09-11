@@ -2,12 +2,12 @@ import json
 import os
 import random
 import string
-
+import secrets
 import redis
 
 
 def random_string(x: int = 10):
-    return "".join(random.choices(string.hexdigits, k=x))
+    return ''.join(secrets.choice(string.hexdigits) for _ in range(x))
 
 
 redis_instance = redis.StrictRedis(
