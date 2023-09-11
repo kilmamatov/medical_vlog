@@ -65,7 +65,9 @@ class TagViewSetTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         tag.refresh_from_db()
         self.assertEqual(
-            tag.name, data["name"], msg="Сравниваем обновленные данные c отправляемыми"
+            tag.name,
+            data["name"],
+            msg="Сравниваем обновленные данные c отправляемыми",
         )
 
     def test_delete_tag(self):

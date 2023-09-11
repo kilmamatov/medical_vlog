@@ -1,13 +1,13 @@
 import json
 import os
-import random
-import string
 import secrets
+import string
+
 import redis
 
 
 def random_string(x: int = 10):
-    return ''.join(secrets.choice(string.hexdigits) for _ in range(x))
+    return "".join(secrets.choice(string.hexdigits) for _ in range(x))
 
 
 redis_instance = redis.StrictRedis(

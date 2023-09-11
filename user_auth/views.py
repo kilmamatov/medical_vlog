@@ -75,13 +75,11 @@ class UserModelView(GenericAPIView):
             serializer.is_valid(raise_exception=True)
             user.save()
             return Response(serializer.data, status=HTTP_200_OK)
-        return None
-        # else:
-        #     return Response(
-        #         {"message": "User does have permission for changed"},
-        #         status=HTTP_400_BAD_REQUEST,
-        #     )
-
+        else:
+            return Response(
+                {"message": "User does have permission for changed"},
+                status=HTTP_400_BAD_REQUEST,
+            )
 
     def delete(self, request, pk):
         try:
@@ -106,23 +104,17 @@ class MyTokenObtainPairView(TokenObtainPairView):
         password = self.request.data["password"]
         user = authenticate(username=username, password=password)
         if user is not None:
-            login(self.request, user)
-            if self.request.user.is_authenticated:
-                response.data["user_id"] = self.request.user.id
-                response.data["username"] = self.request.user.username
+            login(request, user)
+            if user.is_authenticated:
+                response.data["user_id"] = user.id
+                response.data["username"] = user.username
                 return response
-            # else:
-            #     return Response(
-            #         {"message": "wrong credentials, try again"},
-            #         status=HTTP_400_BAD_REQUEST,
-            #     )
+            return None
         return None
-
 
 
 class LogoutUserView(APIView):
     permission_classes = (IsAuthenticated,)
-
 
     def post(self, request):
         logout(self.request)
@@ -144,11 +136,23 @@ class VerifyEmail(APIView):
                 user.is_verify_email = True
                 user.is_active = True
                 user.save()
-            return Response({"email": "Successfully activated"}, status=HTTP_200_OK)
+            return Response(
+                {
+                    "email": "Successfully activated",
+                },
+                status=HTTP_200_OK,
+            )
         except jwt.ExpiredSignatureError:
             return Response(
-                {"error": "Activation Expired"},
+                {
+                    "error": "Activation Expired",
+                },
                 status=HTTP_400_BAD_REQUEST,
             )
         except jwt.exceptions.DecodeError:
-            return Response({"error": "Invalid token"}, status=HTTP_400_BAD_REQUEST)
+            return Response(
+                {
+                    "error": "Invalid token",
+                },
+                status=HTTP_400_BAD_REQUEST,
+            )

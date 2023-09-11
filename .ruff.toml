@@ -45,6 +45,10 @@ unfixable = [
     "ERA001",   # eradicate: found commented out code (can be dangerous if fixed automatically)
 ]
 ignore = [
+    "RUF012",
+    "RET505",
+    "PT009",
+    "PT027",
     "A002",   # builtin shadowing in arguments
     "A003",   # builtin shadowing in attributes
     "D203",   # 1 blank line required before class docstring
@@ -64,7 +68,9 @@ ignore = [
 ]
 
 [per-file-ignores]
-"tests/*" = [
+"*/tests/*" = [
+    "PT027",
+    "PT009",
     "S101",
     "S106",
     "S",        # ignore bandit security issues in tests

@@ -59,13 +59,16 @@ class CommentViewSetTestCase(TestCase):
         post = self.post
         comment = self.comment
         url = reverse(
-            "core:comment-detail", kwargs={"slug": post.slug, "pk": comment.id}
+            "core:comment-detail",
+            kwargs={"slug": post.slug, "pk": comment.id},
         )
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
-            response.data["text"], comment.text, msg="Сверяем text из ответа и базы"
+            response.data["text"],
+            comment.text,
+            msg="Сверяем text из ответа и базы",
         )
 
     def test_patch_comment(self):
@@ -75,7 +78,8 @@ class CommentViewSetTestCase(TestCase):
         post = self.post
         comment = self.comment
         url = reverse(
-            "core:comment-detail", kwargs={"slug": post.slug, "pk": comment.id}
+            "core:comment-detail",
+            kwargs={"slug": post.slug, "pk": comment.id},
         )
         data = {"text": "Updated comment"}
         response = self.client.patch(url, data)
@@ -95,7 +99,8 @@ class CommentViewSetTestCase(TestCase):
         post = self.post
         comment = self.comment
         url = reverse(
-            "core:comment-detail", kwargs={"slug": post.slug, "pk": comment.id}
+            "core:comment-detail",
+            kwargs={"slug": post.slug, "pk": comment.id},
         )
         data = {"text": "Updated text comment"}
         response = self.client.put(url, data)
@@ -115,7 +120,8 @@ class CommentViewSetTestCase(TestCase):
         post = self.post
         comment = self.comment
         url = reverse(
-            "core:comment-detail", kwargs={"slug": post.slug, "pk": comment.id}
+            "core:comment-detail",
+            kwargs={"slug": post.slug, "pk": comment.id},
         )
         response = self.client.delete(url)
 
