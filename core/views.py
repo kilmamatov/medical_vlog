@@ -2,6 +2,8 @@ import os
 
 import requests
 from django_filters.rest_framework import DjangoFilterBackend
+from requests import ConnectTimeout
+from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -9,7 +11,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from core.filters import TagFilters
-from core.mixins import CommentLikedMixin
+from core.mixins import CommentLikedMixin, PostLikedMixin
 from core.models import CommentModel, PostModel, TagModel
 from core.serializers import CommentSerializer, PostSerializer, TagSerializer
 from core.utils import manage_items_to_redis_save
@@ -24,11 +26,11 @@ class TagViewSet(ModelViewSet):
     filterset_class = TagFilters
 
 
-class PostViewSet(ModelViewSet):
+class PostViewSet(PostLikedMixin, ModelViewSet):
     queryset = PostModel.objects.all()
     serializer_class = PostSerializer
-    authentication_classes = (SessionAuthentication,)
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = (SessionAuthentication,)
+    # permission_classes = [IsAuthenticated]
     lookup_field = "slug"
 
     def perform_create(self, serializer):
@@ -55,7 +57,15 @@ class NewsAPIView(APIView):
             "country": "ru",
             "apiKey": os.getenv("NEWS_API_KEY"),
         }
-        response = requests.get(url, params=params)
-        data = response.json()
-        manage_items_to_redis_save("articles", data)
-        return Response(data)
+        try:
+            response = requests.get(url, params=params, timeout=(1.5, 2))
+            data = response.json()
+            manage_items_to_redis_save("articles", data)
+            return Response(data)
+        except ConnectTimeout:
+            return Response(
+                {
+                    "message": "Request has timed out"
+                },
+                status=status.HTTP_408_REQUEST_TIMEOUT
+            )

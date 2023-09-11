@@ -31,3 +31,6 @@ class UserTestCase(TestCase):
             self.super_user.username
             == UserModel.objects.get(username="supertestname").username
         )
+
+    def test_str_user(self):
+        assert str(self.user) == self.user.username
