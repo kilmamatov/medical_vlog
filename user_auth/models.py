@@ -7,8 +7,6 @@ class UserManager(BaseUserManager):
     use_in_migration = True
 
     def create_user(self, username, password=None, email=None):
-        if not username:
-            raise ValueError("user must have a username.")
         user = self.model(username=username, email=email)
         user.set_password(password)
         user.save(using=self._db)

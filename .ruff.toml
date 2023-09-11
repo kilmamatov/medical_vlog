@@ -40,9 +40,6 @@ select = [
     "TRY",      # tryceratops
     "FLY",      # flynt
     "RUF",      # ruff-specific rules
-    "ANN001",   # missing type annotation for arguments
-    "ANN002",   # missing type annotation for *args
-    "ANN003",   # missing type annotation for **kwargs
 ]
 unfixable = [
     "ERA001",   # eradicate: found commented out code (can be dangerous if fixed automatically)
@@ -61,10 +58,15 @@ ignore = [
     "PLW0602",
     "PLW0603",
     "E501",
+    "ANN001",   # missing type annotation for arguments
+    "ANN002",   # missing type annotation for *args
+    "ANN003",   # missing type annotation for **kwargs
 ]
 
 [per-file-ignores]
 "tests/*" = [
+    "S101",
+    "S106",
     "S",        # ignore bandit security issues in tests
     "B018",     # ignore useless expressions in tests
     "PT012",    # ignore complex with pytest.raises clauses
