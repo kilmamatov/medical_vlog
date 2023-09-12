@@ -24,29 +24,27 @@ class PostLikeMixinTestCase(TestCase):
         url = reverse("core:post-like-post", kwargs={"slug": post.slug})
         response = self.client.post(url)
         assert response.status_code == status.HTTP_200_OK
-        self.assertEqual(post.total_likes, 1, msg="Проверяем лайк")
+        assert post.total_likes == 1, "Проверяем лайк"
 
         url = reverse("core:post-like-post", kwargs={"slug": post.slug})
         response = self.client2.post(url)
         assert response.status_code == status.HTTP_200_OK
-        self.assertEqual(
-            post.total_likes, 2, msg="Проверяем лайк от другого пользователя"
-        )
+        assert post.total_likes == 2, "Проверяем лайк от другого пользователя"
 
     def test_unlike_post(self):
         """
-        убираем лайк с поста
+        убираем лайк c поста
         """
         post = self.post
         url = reverse("core:post-like-post", kwargs={"slug": post.slug})
         response = self.client.post(url)
         assert response.status_code == status.HTTP_200_OK
-        self.assertEqual(post.total_likes, 1, msg="ставим лайк")
+        assert post.total_likes == 1, "ставим лайк"
 
         url = reverse("core:post-unlike-post", kwargs={"slug": post.slug})
         response = self.client.post(url)
         assert response.status_code == status.HTTP_200_OK
-        self.assertEqual(post.total_likes, 0, msg="убираем лайк")
+        assert post.total_likes == 0, "убираем лайк"
 
 
 class CommentLikeMixinTestCase(TestCase):
@@ -67,37 +65,39 @@ class CommentLikeMixinTestCase(TestCase):
         post = self.post
         comment = self.comment
         url = reverse(
-            "core:comment-like-comment", kwargs={"slug": post.slug, "pk": comment.id}
+            "core:comment-like-comment",
+            kwargs={"slug": post.slug, "pk": comment.id},
         )
         response = self.client.post(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(comment.total_likes, 1, msg="Проверяем лайк")
+        assert response.status_code == status.HTTP_200_OK
+        assert comment.total_likes == 1, "Проверяем лайк"
 
         url = reverse(
-            "core:comment-like-comment", kwargs={"slug": post.slug, "pk": comment.id}
+            "core:comment-like-comment",
+            kwargs={"slug": post.slug, "pk": comment.id},
         )
         response = self.client2.post(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(
-            comment.total_likes, 2, msg="Проверяем лайк от другого пользователя"
-        )
+        assert response.status_code == status.HTTP_200_OK
+        assert comment.total_likes == 2, "Проверяем лайк от другого пользователя"
 
     def test_unlike_comment(self):
         """
-        убираем лайк с comment
+        убираем лайк c comment
         """
         post = self.post
         comment = self.comment
         url = reverse(
-            "core:comment-like-comment", kwargs={"slug": post.slug, "pk": comment.id}
+            "core:comment-like-comment",
+            kwargs={"slug": post.slug, "pk": comment.id},
         )
         response = self.client.post(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(comment.total_likes, 1, msg="ставим лайк")
+        assert response.status_code == status.HTTP_200_OK
+        assert comment.total_likes == 1, "ставим лайк"
 
         url = reverse(
-            "core:comment-unlike-comment", kwargs={"slug": post.slug, "pk": comment.id}
+            "core:comment-unlike-comment",
+            kwargs={"slug": post.slug, "pk": comment.id},
         )
         response = self.client.post(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(comment.total_likes, 0, msg="убираем лайк")
+        assert response.status_code == status.HTTP_200_OK
+        assert comment.total_likes == 0, "убираем лайк"

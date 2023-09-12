@@ -64,7 +64,7 @@ ignore = [
 ]
 
 [per-file-ignores]
-"tests/*" = [
+"*tests/*" = [
     "S101",
     "S106",
     "S",        # ignore bandit security issues in tests

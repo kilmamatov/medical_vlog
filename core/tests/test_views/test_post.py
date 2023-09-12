@@ -20,12 +20,10 @@ class PostViewSetTestCase(TestCase):
         """
         url = reverse("core:post-list")
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(
-            len(response.data),
-            PostModel.objects.count(),
-            msg="Сверяем количество созданных постов",
-        )
+        assert response.status_code == status.HTTP_200_OK
+        assert (
+            len(response.data) == PostModel.objects.count()
+        ), "Сверяем количество созданных постов"
 
     def test_create_post(self):
         """
@@ -35,12 +33,11 @@ class PostViewSetTestCase(TestCase):
         data = {"title": self.post.title, "text": self.post.text}
         response = self.client.post(url, data)
 
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(
-            PostModel.objects.filter(title=data["title"]).first().title,
-            response.data["title"],
-            msg="Сверяем title из БД и тела запроса",
-        )
+        assert response.status_code == status.HTTP_201_CREATED
+        assert (
+            PostModel.objects.filter(title=data["title"]).first().title
+            == response.data["title"]
+        ), "Сверяем title из БД и тела запроса"
 
     def test_retrieve_post(self):
         """
@@ -50,10 +47,8 @@ class PostViewSetTestCase(TestCase):
         url = reverse("core:post-detail", kwargs={"slug": post.slug})
         response = self.client.get(url)
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(
-            response.data["slug"], post.slug, msg="Сверяем slug из ответа и базы"
-        )
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data["slug"] == post.slug, "Сверяем slug из ответа и базы"
 
     def test_patch_post(self):
         """
@@ -64,13 +59,11 @@ class PostViewSetTestCase(TestCase):
         data = {"title": "Updated Tag"}
         response = self.client.patch(url, data)
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        assert response.status_code == status.HTTP_200_OK
         post.refresh_from_db()
-        self.assertEqual(
-            post.title,
-            data["title"],
-            msg="Сравниваем обновленные данные c отправляемыми",
-        )
+        assert (
+            post.title == data["title"]
+        ), "Сравниваем обновленные данные c отправляемыми"
 
     def test_put_post(self):
         """
@@ -81,13 +74,11 @@ class PostViewSetTestCase(TestCase):
         data = {"title": "Updated Tag", "text": "Updated text"}
         response = self.client.put(url, data)
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        assert response.status_code == status.HTTP_200_OK
         post.refresh_from_db()
-        self.assertEqual(
-            post.title,
-            data["title"],
-            msg="Сравниваем обновленные данные c отправляемыми",
-        )
+        assert (
+            post.title == data["title"]
+        ), "Сравниваем обновленные данные c отправляемыми"
 
     def test_delete_tag(self):
         """
@@ -97,9 +88,7 @@ class PostViewSetTestCase(TestCase):
         url = reverse("core:post-detail", kwargs={"slug": post.slug})
         response = self.client.delete(url)
 
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(
-            PostModel.objects.filter(slug=post.slug).exists(),
-            False,
-            msg="Проверяем на наличие в бд",
-        )
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert (
+            PostModel.objects.filter(slug=post.slug).exists() is False
+        ), "Проверяем на наличие в бд"

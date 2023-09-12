@@ -1,7 +1,6 @@
 from django.contrib.contenttypes.models import ContentType
 
 from core.models import LikeModel
-from user_auth.models import UserModel
 
 
 def add_like(obj, user):
