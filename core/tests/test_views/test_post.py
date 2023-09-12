@@ -46,7 +46,6 @@ class PostViewSetTestCase(TestCase):
         post = self.post
         url = reverse("core:post-detail", kwargs={"slug": post.slug})
         response = self.client.get(url)
-
         assert response.status_code == status.HTTP_200_OK
         assert response.data["slug"] == post.slug, "Сверяем slug из ответа и базы"
 

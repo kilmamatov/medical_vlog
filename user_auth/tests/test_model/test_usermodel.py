@@ -33,4 +33,4 @@ class UserTestCase(TestCase):
         )
 
     def test_str_user(self):
-        assert str(self.user) == self.user.username
+        assert UserModel.__str__(self.user) == self.user.username

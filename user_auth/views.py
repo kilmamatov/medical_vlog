@@ -105,16 +105,11 @@ class MyTokenObtainPairView(TokenObtainPairView):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            # if user.is_authenticated:
-            #     response.data["user_id"] = user.id
-            #     response.data["username"] = user.username
-            return response
-            # return None
-        return Response(
-            {
-                "message": "try again",
-            }
-        )
+            if user.is_authenticated:
+                response.data["user_id"] = user.id
+                response.data["username"] = user.username
+                return response            
+        return None
 
 
 class LogoutUserView(APIView):

@@ -58,9 +58,12 @@ class CommentViewSetTestCase(TestCase):
             kwargs={"slug": post.slug, "pk": comment.id},
         )
         response = self.client.get(url)
-
-        assert response.status_code == status.HTTP_200_OK
-        assert response.data["text"] == comment.text, "Сверяем text из ответа и базы"
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            response.data["text"],
+            comment.text,
+            msg="Сверяем text из ответа и базы",
+        )
 
     def test_patch_comment(self):
         """

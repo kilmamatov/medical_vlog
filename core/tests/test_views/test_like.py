@@ -29,6 +29,7 @@ class PostLikeMixinTestCase(TestCase):
         url = reverse("core:post-like-post", kwargs={"slug": post.slug})
         response = self.client2.post(url)
         assert response.status_code == status.HTTP_200_OK
+
         assert post.total_likes == 2, "Проверяем лайк от другого пользователя"
 
     def test_unlike_post(self):
@@ -77,12 +78,16 @@ class CommentLikeMixinTestCase(TestCase):
             kwargs={"slug": post.slug, "pk": comment.id},
         )
         response = self.client2.post(url)
-        assert response.status_code == status.HTTP_200_OK
-        assert comment.total_likes == 2, "Проверяем лайк от другого пользователя"
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            comment.total_likes,
+            2,
+            msg="Проверяем лайк от другого пользователя",
+        )
 
     def test_unlike_comment(self):
         """
-        убираем лайк c comment
+        Убираем лайк c comment
         """
         post = self.post
         comment = self.comment
