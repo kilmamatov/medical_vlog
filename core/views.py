@@ -14,7 +14,7 @@ from core.filters import TagFilters
 from core.mixins import CommentLikedMixin, PostLikedMixin
 from core.models import CommentModel, PostModel, TagModel
 from core.serializers import CommentSerializer, PostSerializer, TagSerializer
-from core.utils import manage_items_to_redis_save
+from core.utils import CacheRedis
 
 
 class TagViewSet(ModelViewSet):
@@ -51,16 +51,22 @@ class CommentViewSet(CommentLikedMixin, ModelViewSet):
 
 
 class NewsAPIView(APIView):
+    articles = "articles"
+
     def get(self, request):
         url = "https://newsapi.org/v2/top-headlines"
         params = {
             "country": "ru",
             "apiKey": os.getenv("NEWS_API_KEY"),
         }
+        cache = CacheRedis()
+        articles = cache.manage_items_to_redis_get(self.articles)
+        if articles:
+            return Response(articles)
         try:
             response = requests.get(url, params=params, timeout=(1.5, 2))
             data = response.json()
-            manage_items_to_redis_save("articles", data)
+            cache.manage_items_to_redis_save(key=self.articles, data=data)
             return Response(data)
         except ConnectTimeout:
             return Response(

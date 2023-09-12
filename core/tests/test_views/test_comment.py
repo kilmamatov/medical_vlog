@@ -22,12 +22,10 @@ class CommentViewSetTestCase(TestCase):
         """
         url = reverse("core:comment-list", kwargs={"slug": self.post.slug})
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(
-            len(response.data),
-            CommentModel.objects.count(),
-            msg="Сверяем количество созданных comment",
-        )
+        assert response.status_code == status.HTTP_200_OK
+        assert (
+            len(response.data) == CommentModel.objects.count()
+        ), "Сверяем количество созданных comment"
 
     def test_create_comment(self):  # переделать
         """
@@ -40,17 +38,14 @@ class CommentViewSetTestCase(TestCase):
         }
         response = self.client.post(url, data)
 
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(
-            post.total_comment,
-            1,
-            msg="Проверяем количество созданных комментов к посту",
-        )
-        self.assertEqual(
-            CommentModel.objects.filter(text=data["text"]).first().text,
-            response.data["text"],
-            msg="Сверяем text из БД и тела запроса",
-        )
+        assert response.status_code == status.HTTP_201_CREATED
+        assert (
+            post.total_comment == 1
+        ), "Проверяем количество созданных комментов к посту"
+        assert (
+            CommentModel.objects.filter(text=data["text"]).first().text
+            == response.data["text"]
+        ), "Сверяем text из БД и тела запроса"
 
     def test_retrieve_comment(self):
         """
@@ -63,7 +58,6 @@ class CommentViewSetTestCase(TestCase):
             kwargs={"slug": post.slug, "pk": comment.id},
         )
         response = self.client.get(url)
-
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             response.data["text"],
@@ -84,13 +78,11 @@ class CommentViewSetTestCase(TestCase):
         data = {"text": "Updated comment"}
         response = self.client.patch(url, data)
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        assert response.status_code == status.HTTP_200_OK
         comment.refresh_from_db()
-        self.assertEqual(
-            comment.text,
-            data["text"],
-            msg="Сравниваем обновленные данные c отправляемыми",
-        )
+        assert (
+            comment.text == data["text"]
+        ), "Сравниваем обновленные данные c отправляемыми"
 
     def test_put_comment(self):
         """
@@ -105,13 +97,11 @@ class CommentViewSetTestCase(TestCase):
         data = {"text": "Updated text comment"}
         response = self.client.put(url, data)
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        assert response.status_code == status.HTTP_200_OK
         comment.refresh_from_db()
-        self.assertEqual(
-            comment.text,
-            data["text"],
-            msg="Сравниваем обновленные данные c отправляемыми",
-        )
+        assert (
+            comment.text == data["text"]
+        ), "Сравниваем обновленные данные c отправляемыми"
 
     def test_delete_tag(self):
         """
@@ -125,9 +115,7 @@ class CommentViewSetTestCase(TestCase):
         )
         response = self.client.delete(url)
 
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(
-            CommentModel.objects.filter(id=comment.id).exists(),
-            False,
-            msg="Проверяем на наличие в бд",
-        )
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert (
+            CommentModel.objects.filter(id=comment.id).exists() is False
+        ), "Проверяем на наличие в бд"
