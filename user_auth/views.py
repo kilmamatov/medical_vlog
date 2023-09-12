@@ -100,16 +100,15 @@ class UserModelView(GenericAPIView):
 class MyTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
-        username = self.request.data["username"]
-        password = self.request.data["password"]
+        username = request.data["username"]
+        password = request.data["password"]
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
             if user.is_authenticated:
                 response.data["user_id"] = user.id
                 response.data["username"] = user.username
-                return response
-            return None
+                return response            
         return None
 
 
