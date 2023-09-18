@@ -1,11 +1,12 @@
 from datetime import datetime, timedelta
 from unittest import TestCase
 
+import pytest
 from django.urls import reverse
 from rest_framework import serializers, status
 from rest_framework.test import APIClient
 from rest_framework_simplejwt.tokens import RefreshToken
-import pytest
+
 from core import factories
 from user_auth.models import UserModel
 from user_auth.serializers import RegisterUser
@@ -17,6 +18,8 @@ class AuthUserTestCase(TestCase):
         self.user2 = factories.User()
         self.client = APIClient()
         self.client2 = APIClient()
+        self.super_user = factories.SuperUser()
+        self.client2.force_authenticate(user=self.super_user)
         self.client.force_authenticate(user=self.user)
 
     def test_registration_user(self):
@@ -184,3 +187,12 @@ class AuthUserTestCase(TestCase):
         user = UserModel.objects.get(id=self.user.id)
         assert not user.is_verify_email
         assert not user.is_active
+
+    # def test_get_token(self):
+    #     url = reverse("user_auth:login")
+    #     data = {
+    #         "username": self.user.username,
+    #         "password": self.user.password,
+    #     }
+    #     response = self.client2.post(url, data)
+    #     self.assertEqual(response.json(), status.HTTP_200_OK)

@@ -64,3 +64,5 @@ typing_extensions==4.7.1
 uritemplate==4.1.1
 urllib3==2.0.4
 wcwidth==0.2.6
+
+pytest~=7.4.2
