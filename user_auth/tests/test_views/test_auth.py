@@ -1,12 +1,11 @@
 from datetime import datetime, timedelta
 from unittest import TestCase
 
-import pytest
 from django.urls import reverse
 from rest_framework import serializers, status
 from rest_framework.test import APIClient
 from rest_framework_simplejwt.tokens import RefreshToken
-
+import pytest
 from core import factories
 from user_auth.models import UserModel
 from user_auth.serializers import RegisterUser
@@ -31,8 +30,8 @@ class AuthUserTestCase(TestCase):
         response = self.client.post(url, data)
         assert response.status_code == status.HTTP_201_CREATED
         assert (
-            UserModel.objects.get(username=data["username"]).username
-            == data["username"]
+                UserModel.objects.get(username=data["username"]).username
+                == data["username"]
         )
 
     def test_registration_user_bad_password(self):
@@ -77,12 +76,12 @@ class AuthUserTestCase(TestCase):
         response = self.client.patch(url, data)
         assert response.status_code == status.HTTP_200_OK
         assert (
-            UserModel.objects.get(username=data["username"]).username
-            == data["username"]
+                UserModel.objects.get(username=data["username"]).username
+                == data["username"]
         )
         assert (
-            UserModel.objects.get(username=data["username"]).description
-            == data["description"]
+                UserModel.objects.get(username=data["username"]).description
+                == data["description"]
         )
 
     def test_bad_pk_update_info_user(self):

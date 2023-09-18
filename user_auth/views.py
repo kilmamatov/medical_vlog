@@ -121,7 +121,7 @@ class LogoutUserView(APIView):
 
     def post(self, request):
         logout(self.request)
-        token_to_black_list = request.data["refresh_token"]
+        token_to_black_list = self.request.data["refresh_token"]
         token = RefreshToken(token_to_black_list)
         token.blacklist()
         return Response(status=HTTP_204_NO_CONTENT)
