@@ -17,20 +17,33 @@ class UserTestCase(TestCase):
         )
 
     def test_create_user(self):
-        assert self.user == UserModel.objects.get(username="testname")
-        assert self.user.email == UserModel.objects.get(email="test@mail.ru").email
-        assert self.user.username == UserModel.objects.get(username="testname").username
+        user = UserModel.objects.create_user(
+            username="testuser",
+            password="testpass",
+            email="test@gmail.com"
+        )
+        assert user == UserModel.objects.get(username="testuser")
+        assert user.email == UserModel.objects.get(email="test@gmail.com").email
+        assert user.username == UserModel.objects.get(username="testuser").username
 
     def test_create_super_user(self):
-        assert self.super_user == UserModel.objects.get(username="supertestname")
+        super_user = UserModel.objects.create_superuser(
+            username="supertestuser",
+            password="supertestpass",
+            email="supertest@gmail.com"
+        )
+        assert super_user == UserModel.objects.get(username="supertestuser")
         assert (
-            self.super_user.email
-            == UserModel.objects.get(email="supertest@mail.ru").email
+                super_user.email
+                == UserModel.objects.get(email="supertest@gmail.com").email
         )
         assert (
-            self.super_user.username
-            == UserModel.objects.get(username="supertestname").username
+                super_user.username
+                == UserModel.objects.get(username="supertestuser").username
         )
 
+    # def test_str_user(self):
+    #     assert UserModel.__str__(self.user) == self.user.username
+
     def test_str_user(self):
-        assert UserModel.__str__(self.user) == self.user.username
+        assert str(self.user) == self.user.username

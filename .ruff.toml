@@ -65,6 +65,7 @@ ignore = [
     "ANN001",   # missing type annotation for arguments
     "ANN002",   # missing type annotation for *args
     "ANN003",   # missing type annotation for **kwargs
+    "ARG005",
 ]
 
 [per-file-ignores]

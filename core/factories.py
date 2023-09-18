@@ -23,6 +23,19 @@ class User(factory.django.DjangoModelFactory):
         model = UserModel
 
 
+class SuperUser(factory.django.DjangoModelFactory):
+    username = factory.Sequence(lambda n: "superuser%d" % n)
+    password = factory.Sequence(lambda n: "7859375jehfwe%d" % n)
+    email = factory.Sequence(lambda n: f"superuser{n}@example.com")
+    is_superuser = True
+    is_active = True
+    is_verify_email = True
+    is_staff = True
+
+    class Meta:
+        model = UserModel
+
+
 class Post(factory.django.DjangoModelFactory):
     title = factory.Sequence(lambda n: factory_ru.word())
     text = factory.Sequence(lambda n: factory_ru.word())
