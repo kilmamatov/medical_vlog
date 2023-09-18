@@ -116,6 +116,7 @@ class MyTokenObtainPairView(TokenObtainPairView):
         )
 
 
+
 class LogoutUserView(APIView):
     permission_classes = (IsAuthenticated,)
 

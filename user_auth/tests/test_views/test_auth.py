@@ -91,7 +91,7 @@ class AuthUserTestCase(TestCase):
             "description": "updatedescrip",
         }
         response = self.client.patch(url, data)
-        assert response.status_code == status.HTTP_404_NOT_FOUND
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         assert response.json()["message"] == "User does not exist, try again"
 
     def test_bad_request_pk_update_info_user(self):
