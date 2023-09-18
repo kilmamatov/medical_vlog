@@ -8,7 +8,7 @@ factory_ru = Factory.create("ru_RU")
 
 
 class Tag(factory.django.DjangoModelFactory):
-    name = factory.Sequence(lambda: factory_ru.word())
+    name = factory.Sequence(lambda n: factory_ru.word())
 
     class Meta:
         model = TagModel
@@ -24,15 +24,15 @@ class User(factory.django.DjangoModelFactory):
 
 
 class Post(factory.django.DjangoModelFactory):
-    title = factory.Sequence(lambda: factory_ru.word())
-    text = factory.Sequence(lambda: factory_ru.word())
+    title = factory.Sequence(lambda n: factory_ru.word())
+    text = factory.Sequence(lambda n: factory_ru.word())
 
     class Meta:
         model = PostModel
 
 
 class Comment(factory.django.DjangoModelFactory):
-    text = factory.Sequence(lambda: factory_ru.word())
+    text = factory.Sequence(lambda n: factory_ru.word())
 
     class Meta:
         model = CommentModel

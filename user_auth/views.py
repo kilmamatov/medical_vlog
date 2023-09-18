@@ -108,8 +108,13 @@ class MyTokenObtainPairView(TokenObtainPairView):
             if user.is_authenticated:
                 response.data["user_id"] = user.id
                 response.data["username"] = user.username
-                return response            
-        return None
+            return response
+        return Response(
+            {
+                "message": "try again",
+            }
+        )
+
 
 
 class LogoutUserView(APIView):
@@ -117,7 +122,7 @@ class LogoutUserView(APIView):
 
     def post(self, request):
         logout(self.request)
-        token_to_black_list = request.data["refresh_token"]
+        token_to_black_list = self.request.data["refresh_token"]
         token = RefreshToken(token_to_black_list)
         token.blacklist()
         return Response(status=HTTP_204_NO_CONTENT)
