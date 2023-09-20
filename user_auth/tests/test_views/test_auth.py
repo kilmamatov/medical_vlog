@@ -33,8 +33,8 @@ class AuthUserTestCase(TestCase):
         response = self.client.post(url, data)
         assert response.status_code == status.HTTP_201_CREATED
         assert (
-                UserModel.objects.get(username=data["username"]).username
-                == data["username"]
+            UserModel.objects.get(username=data["username"]).username
+            == data["username"]
         )
 
     def test_registration_user_bad_password(self):
@@ -79,12 +79,12 @@ class AuthUserTestCase(TestCase):
         response = self.client.patch(url, data)
         assert response.status_code == status.HTTP_200_OK
         assert (
-                UserModel.objects.get(username=data["username"]).username
-                == data["username"]
+            UserModel.objects.get(username=data["username"]).username
+            == data["username"]
         )
         assert (
-                UserModel.objects.get(username=data["username"]).description
-                == data["description"]
+            UserModel.objects.get(username=data["username"]).description
+            == data["description"]
         )
 
     def test_bad_pk_update_info_user(self):
@@ -187,12 +187,3 @@ class AuthUserTestCase(TestCase):
         user = UserModel.objects.get(id=self.user.id)
         assert not user.is_verify_email
         assert not user.is_active
-
-    # def test_get_token(self):
-    #     url = reverse("user_auth:login")
-    #     data = {
-    #         "username": self.user.username,
-    #         "password": self.user.password,
-    #     }
-    #     response = self.client2.post(url, data)
-    #     self.assertEqual(response.json(), status.HTTP_200_OK)

@@ -4,6 +4,10 @@ import secrets
 import string
 
 import redis
+import requests
+from requests import ConnectTimeout
+
+from user_auth.tasks import app
 
 
 def random_string(x: int = 10):
@@ -28,3 +32,24 @@ class CacheRedis:
         if not retrieved_data_string:
             return None
         return json.loads(retrieved_data_string)
+
+
+@app.task
+def news_api():
+    url = "https://newsapi.org/v2/top-headlines"
+    params = {
+        "country": "ru",
+        "apiKey": os.getenv("NEWS_API_KEY"),
+    }
+    articles = CacheRedis().manage_items_to_redis_get("articles")
+    if articles:
+        return articles
+    try:
+        response = requests.get(url, params=params, timeout=(1.5, 2))
+        data = response.json()
+        CacheRedis().manage_items_to_redis_save(key="articles", data=data)
+        return data
+    except ConnectTimeout:
+        return {
+            "message": "Request has timed out",
+        }
