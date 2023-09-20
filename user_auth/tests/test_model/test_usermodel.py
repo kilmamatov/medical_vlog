@@ -20,7 +20,7 @@ class UserTestCase(TestCase):
         user = UserModel.objects.create_user(
             username="testuser",
             password="testpass",
-            email="test@gmail.com"
+            email="test@gmail.com",
         )
         assert user == UserModel.objects.get(username="testuser")
         assert user.email == UserModel.objects.get(email="test@gmail.com").email
@@ -30,20 +30,16 @@ class UserTestCase(TestCase):
         super_user = UserModel.objects.create_superuser(
             username="supertestuser",
             password="supertestpass",
-            email="supertest@gmail.com"
+            email="supertest@gmail.com",
         )
         assert super_user == UserModel.objects.get(username="supertestuser")
         assert (
-                super_user.email
-                == UserModel.objects.get(email="supertest@gmail.com").email
+            super_user.email == UserModel.objects.get(email="supertest@gmail.com").email
         )
         assert (
-                super_user.username
-                == UserModel.objects.get(username="supertestuser").username
+            super_user.username
+            == UserModel.objects.get(username="supertestuser").username
         )
-
-    # def test_str_user(self):
-    #     assert UserModel.__str__(self.user) == self.user.username
 
     def test_str_user(self):
         assert str(self.user) == self.user.username

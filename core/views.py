@@ -1,8 +1,4 @@
-import os
-
-import requests
 from django_filters.rest_framework import DjangoFilterBackend
-from requests import ConnectTimeout
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -14,7 +10,7 @@ from core.filters import TagFilters
 from core.mixins import CommentLikedMixin, PostLikedMixin
 from core.models import CommentModel, PostModel, TagModel
 from core.serializers import CommentSerializer, PostSerializer, TagSerializer
-from core.utils import CacheRedis
+from core.utils import news_api
 
 
 class TagViewSet(ModelViewSet):
@@ -50,27 +46,6 @@ class CommentViewSet(CommentLikedMixin, ModelViewSet):
 
 
 class NewsAPIView(APIView):
-    articles = "articles"
-
     def get(self, request):
-        url = "https://newsapi.org/v2/top-headlines"
-        params = {
-            "country": "ru",
-            "apiKey": os.getenv("NEWS_API_KEY"),
-        }
-        cache = CacheRedis()
-        articles = cache.manage_items_to_redis_get(self.articles)
-        if articles:
-            return Response(articles)
-        try:
-            response = requests.get(url, params=params, timeout=(1.5, 2))
-            data = response.json()
-            cache.manage_items_to_redis_save(key=self.articles, data=data)
-            return Response(data)
-        except ConnectTimeout:
-            return Response(
-                {
-                    "message": "Request has timed out",
-                },
-                status=status.HTTP_408_REQUEST_TIMEOUT,
-            )
+        response = news_api()
+        return Response(response, status=status.HTTP_200_OK)

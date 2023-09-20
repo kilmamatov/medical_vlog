@@ -192,3 +192,12 @@ EMAIL_PORT = os.getenv("EMAIL_PORT")
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+CELERY_EMAIL_TASK_CONFIG = {
+    "queue": "email",
+    "rate_limit": "20/m",
+}
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER")
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER")
