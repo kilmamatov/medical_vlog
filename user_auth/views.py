@@ -2,6 +2,7 @@ import os
 
 import jwt
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import FileUploadParser
@@ -24,7 +25,7 @@ from user_auth.serializers import (
     RegisterUser,
     UserProfileSerializer,
 )
-from user_auth.utils import Supporting
+from user_auth.tasks import send_email_with_celery
 
 
 class RegisterUserView(GenericAPIView):
@@ -40,7 +41,16 @@ class RegisterUserView(GenericAPIView):
             email=serializer.validated_data["email"],
         )
         user.save()
-        Supporting.send_email(request, user)
+        current_site = get_current_site(request).domain
+        token = str(RefreshToken.for_user(user).access_token)
+        send_email_with_celery.apply_async(
+            args=[
+                current_site,
+                user.username,
+                user.email,
+                token,
+            ],
+        )
         return Response(
             {
                 "message": f"You have successfully registered, go to {user.email} and verify it",
@@ -131,7 +141,7 @@ class VerifyEmail(APIView):
     serializer_class = EmailVerificationSerializer
 
     def get(self, request):
-        token = request.GET.get("token")
+        token = self.request.GET.get("token")
         try:
             payload = jwt.decode(token, os.getenv("SECRET_KEY"), algorithms=["HS256"])
             user = UserModel.objects.get(id=payload["user_id"])

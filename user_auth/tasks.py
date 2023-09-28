@@ -1,15 +1,21 @@
 import os
-from datetime import timedelta
 
-from celery import Celery
+from django.core.mail import send_mail
+from django.urls import reverse
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
-app = Celery()
+from project.celery import app
 
-app.conf.broker_connection_retry_on_startup = True
-app.conf.beat_schedule = {
-    "send_email_to_user_for_verify_acc": {
-        "task": "core.utils.news_api",
-        "schedule": timedelta(seconds=60),
-    },
-}
+
+@app.task
+def send_email_with_celery(current_site, username, email, token):
+    relative_link = reverse("user_auth:email-verify")
+    abs_url = "http://" + current_site + relative_link + "?token=" + token
+    email_body = (
+        "Hi " + username + " Use the link below to verify your email \n" + abs_url
+    )
+    send_mail(
+        subject="Verify your email",
+        message=email_body,
+        recipient_list=[email],
+        from_email=os.getenv("EMAIL_HOST_USER"),
+    )
