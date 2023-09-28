@@ -7,7 +7,7 @@ import redis
 import requests
 from requests import ConnectTimeout
 
-from user_auth.tasks import app
+from project.celery import app
 
 
 def random_string(x: int = 10):
@@ -31,7 +31,7 @@ class CacheRedis:
         retrieved_data_string = self.redis_instance.get(key)
         if not retrieved_data_string:
             return None
-        return json.loads(retrieved_data_string)
+        return json.loads(str(retrieved_data_string))
 
 
 @app.task
