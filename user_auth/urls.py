@@ -5,6 +5,7 @@ from rest_framework_simplejwt.views import (
 )
 
 from user_auth.views import (
+    GetNewAcc,
     LogoutUserView,
     MyTokenObtainPairView,
     RegisterUserView,
@@ -21,6 +22,7 @@ auth = [
     path("login/", MyTokenObtainPairView.as_view(), name="login"),
     path("logout/", LogoutUserView.as_view(), name="logout"),
     path("email-verify/", VerifyEmail.as_view(), name="email-verify"),
+    path("create_employee/", GetNewAcc.as_view(), name="create_employee"),
 ]
 
 urlpatterns = [
