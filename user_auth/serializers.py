@@ -36,3 +36,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class EmailVerificationSerializer(serializers.Serializer):
     token = serializers.CharField(max_length=555)
+
+
+class CreateUserWithEmail(serializers.Serializer):
+    email = serializers.CharField(max_length=30)

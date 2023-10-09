@@ -19,8 +19,10 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from core.utils import random_string, random_username
 from user_auth.models import UserModel
 from user_auth.serializers import (
+    CreateUserWithEmail,
     EmailVerificationSerializer,
     RegisterUser,
     UserProfileSerializer,
@@ -169,3 +171,31 @@ class VerifyEmail(APIView):
                 },
                 status=HTTP_400_BAD_REQUEST,
             )
+
+
+class GetNewAcc(GenericAPIView):
+    serializer_class = CreateUserWithEmail
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        username = random_username(10)
+        password = random_string(8)
+        user = UserModel.objects.create_user(
+            username=username,
+            password=password,
+            email=serializer.validated_data["email"],
+        )
+        user.is_verify_email = True
+        user.is_active = True
+        user.save()
+        return Response(
+            {
+                "message": "user successfully created",
+                "username": user.username,
+                "password": user.password,
+                "email": user.email,
+            },
+            status=HTTP_201_CREATED,
+        )

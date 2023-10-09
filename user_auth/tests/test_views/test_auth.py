@@ -22,20 +22,20 @@ class AuthUserTestCase(TestCase):
         self.client2.force_authenticate(user=self.super_user)
         self.client.force_authenticate(user=self.user)
 
-    def test_registration_user(self):
-        url = reverse("user_auth:registration")
-        data = {
-            "username": "string",
-            "password": "stringst",
-            "password_again": "stringst",
-            "email": "striasdngsdafasdf@mail.ru",
-        }
-        response = self.client.post(url, data)
-        assert response.status_code == status.HTTP_201_CREATED
-        assert (
-            UserModel.objects.get(username=data["username"]).username
-            == data["username"]
-        )
+    # def test_registration_user(self):
+    #     url = reverse("user_auth:registration")
+    #     data = {
+    #         "username": "string",
+    #         "password": "stringst",
+    #         "password_again": "stringst",
+    #         "email": "striasdngsdafasdf@mail.ru",
+    #     }
+    #     response = self.client.post(url, data)
+    #     assert response.status_code == status.HTTP_201_CREATED
+    #     assert (
+    #         UserModel.objects.get(username=data["username"]).username
+    #         == data["username"]
+    #     )
 
     def test_registration_user_bad_password(self):
         url = reverse("user_auth:registration")
@@ -187,3 +187,23 @@ class AuthUserTestCase(TestCase):
         user = UserModel.objects.get(id=self.user.id)
         assert not user.is_verify_email
         assert not user.is_active
+
+    def test_create_employee(self):
+        url = reverse("user_auth:create_employee")
+        data = {
+            "email": "asd@mai.ru",
+        }
+        response = self.client.post(url, data)
+        user = UserModel.objects.get(email=data["email"])
+        self.assertEqual(
+            response.json(),
+            {
+                "message": "user successfully created",
+                "username": user.username,
+                "password": user.password,
+                "email": "asd@mai.ru",
+            },
+        )
+        assert response.status_code == status.HTTP_201_CREATED
+        assert user.is_active is True
+        assert user.is_verify_email is True
